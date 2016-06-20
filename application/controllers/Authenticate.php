@@ -9,8 +9,6 @@ class Authenticate extends BASE_Controller {
 		parent::__construct();
 	}
 
-	public function index() {}
-	
 	public function register()
 	{
 		$this->load->helper('form');
@@ -21,6 +19,7 @@ class Authenticate extends BASE_Controller {
 	public function login()
 	{
 		$this->load->helper('form');
+		$this->load->config('facebook');
 		$this->_pageLayout = 'login';
 		$this->_build();
 	}
@@ -107,10 +106,73 @@ class Authenticate extends BASE_Controller {
 	public function facebook_post()
 	{
 		$this->load->library('facebook');
+
+		$response = array(
+			'success' => false
+		);
+
+		if (!empty($this->facebook->is_authenticated()))
+		{
+			$userFB = $this->facebook->request('get', '/me?fields=id,name,email');
+
+			$user = $this->user_model->get_user(array('email' => $userFB->email));
+
+			if (false !== $user)
+			{
+				if (false !== strpos($user->type, 'facebook'))
+				{
+					// update with facebook type
+					$data = array(
+						'userId' => $user->userId,
+						'type'   => $user->type . ',facebook'
+					);
+
+					$this->user_model->update_record($data);
+
+					$response['success'] = true;
+				}
+			}
+			else
+			{
+				$data = array(
+					'email' => $user->email,
+					'type'  => 'facebook'
+				);
+
+				if (false === $this->user_model->add_user($data))
+				{
+					$response['errors']['general'] = 'Failed to add account.';
+				}
+				else
+				{
+					$response['success'] = true;
+				}
+			}
+		}
+		else
+		{
+			$respose['errors']['general'] = 'Could not authenticate using Facebook.';
+		}
+
+		$this->_api_response($response);
 	}
 
 	public function github_post()
 	{
 		$this->load->library('github');	
+	}
+
+	/**
+	 * Starts the session.
+	 *
+	 * @param  array  $data Array containing email and userId.
+	 *
+	 * @return void
+	 */
+	private function _start_session(array $data)
+	{
+		$this->load->library('user');
+
+		$this->user::save_session($data);
 	}
 }

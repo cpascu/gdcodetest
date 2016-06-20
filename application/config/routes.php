@@ -58,3 +58,4 @@ $route['^register']     = 'authenticate/register';
 $route['^login']        = 'authenticate/login';
 $route['^api/register'] = 'authenticate/register_post';
 $route['^api/login']    = 'authenticate/login_post';
+$route['^api/facebook'] = 'authenticate/facebook_post';

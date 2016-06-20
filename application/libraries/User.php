@@ -11,6 +11,17 @@ abstract class User {
 		//get the user instance, test session if logged in only once
 	}
 
+	abstract public function save_session(array $data)
+	{
+		if (!empty($data))
+		{
+			$this->session->set_userdata($data);
+			return true;
+		}
+		
+		return false;
+	}
+
 	public function __construct()
 	{
 	

@@ -58,6 +58,22 @@ abstract class Base_model extends CI_Model
 		}
 	}
 
+	public function update_record(array $data)
+	{
+		$pKey = $this->_get_primary_key();
+
+		if (!array_key_exists($pKey, $data) || 
+			!is_numeric($data[$pKey]))
+		{
+			log_message('error', __METHOD__ . ': Invalid primary key.');
+			return false;
+		}
+
+		$data = $this->_sanitize($data);
+
+		$this->db->update($this->_get_table_name, $data);
+	}
+
 	protected function _sanitize(array $data)
 	{
 		return $data;

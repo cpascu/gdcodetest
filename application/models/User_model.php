@@ -35,10 +35,8 @@ class User_model extends Base_model {
 
 	public function add_user(array $data)
 	{
-		if (empty($data['username']) || 
-			empty($data['email']) ||
-			empty($data['password']) ||
-			empty($data['type'] ))
+		if ( empty($data['email']) ||
+			 empty($data['type'] ))
 		{
 			log_message('error', __METHOD__ . ': Failed to add user, missing required data.');
 			return false;
@@ -69,13 +67,16 @@ class User_model extends Base_model {
 		{
 			switch ($index)
 			{
+				case 'password':
+					$d = password_hash($d, PASSWORD_BCRYPT);
+					break;
+				case 'userId':
+					$d = (int)$d;
+					break;
 				case 'username':
 				case 'email':
 				case 'type':
 				case 'token':
-					break;
-				case 'password':
-					$d = password_hash($d, PASSWORD_BCRYPT);
 					break;
 			}
 		}

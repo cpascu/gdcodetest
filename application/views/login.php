@@ -14,6 +14,8 @@
 	</script>
 </head>
 <body>
+	<button class="js-facebook">Facebook</button>
+	<button class="js-github">Github</button>
 	<?= form_open('api/login', array('class' => 'js-auth')); ?>
 	<div>
 	<?= form_input(array(
