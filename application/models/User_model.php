@@ -9,7 +9,14 @@ require_once('Base_model.php');
 class User_model extends Base_model {
 	private $_tableName  = 'users';
 	private $_primaryKey = 'userId';
-	private $_columns    = array('userId', 'name', 'email', 'password', 'type', 'token');
+	private $_columns    = array(
+		'userId', 
+		'username', 
+		'email', 
+		'password', 
+		'type', 
+		'token'
+	);
 
 	public function __construct()
 	{
@@ -28,14 +35,51 @@ class User_model extends Base_model {
 
 	public function add_user(array $data)
 	{
-		if (empty($data['name']) || 
-			empty($data['email'] ||
-			empty($data['password'] ||
+		if (empty($data['username']) || 
+			empty($data['email']) ||
+			empty($data['password']) ||
 			empty($data['type'] ))
 		{
 			log_message('error', __METHOD__ . ': Failed to add user, missing required data.');
+			return false;
 		}
 
-		$this->add_record($data);
+		$userId = $this->add_record($data);
+
+		return (false !== $userId) ? $userId : false;
+	}
+
+	public function get_user(array $data)
+	{
+		if (empty($data['username']))
+		{
+			log_message('error', __METHOD__ . ': Missing required params.');
+			return false;
+		}
+
+		$user = $this->get_record($data);
+
+		// there will be only 1 result, unique column
+		return !empty($user) ? $user[0] : false;
+	}
+
+	protected function _sanitize (array $data)
+	{
+		foreach ($data as $index => &$d)
+		{
+			switch ($index)
+			{
+				case 'username':
+				case 'email':
+				case 'type':
+				case 'token':
+					break;
+				case 'password':
+					$d = password_hash($d, PASSWORD_BCRYPT);
+					break;
+			}
+		}
+
+		return $data;
 	}
 }

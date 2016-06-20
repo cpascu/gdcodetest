@@ -5,13 +5,13 @@ if (!function_exists('json_decode')) throw new Exception('JSON PHP extension is 
 
 class Github {
 		
-	protected $api_url = 'https://api.github.com/';
-	protected $client_id = '';
+	protected $api_url       = 'https://api.github.com/';
+	protected $client_id     = '';
 	protected $client_secret = '';
-	protected $state = '';
-	protected $redirect_uri = '';
-	protected $scope = '';
-	protected $access_token = '';
+	protected $state         = '';
+	protected $redirect_uri  = '';
+	protected $scope         = '';
+	protected $access_token  = '';
 	
 	protected $error_message = FALSE;
 
@@ -21,24 +21,24 @@ class Github {
 		$this->CI->config->load('github');
 		
 		$default_config = array(
-			'redirect_uri' => urlencode($this->CI->config->item('redirect_uri')),
-			'client_id' => $this->CI->config->item('client_id'),
+			'redirect_uri'  => urlencode($this->CI->config->item('redirect_uri')),
+			'client_id'     => $this->CI->config->item('client_id'),
 			'client_secret' => $this->CI->config->item('client_secret'),
-			'state' => $this->CI->session->userdata('session_id'),
-			'scope' => $this->CI->config->item('scope')
+			'state'         => $this->CI->session->userdata('session_id'),
+			'scope'         => $this->CI->config->item('scope')
         );
 		
         // Merge default and user config. User config takes predence over default config
         $config = array_merge($default_config, $user_config);
 
         // Set all attributes
-        $this->redirect_uri		= $config['redirect_uri'];
-        $this->client_id    	= $config['client_id'];
-        $this->client_secret 	= $config['client_secret'];
-        $this->state  			= $config['state'];
-        $this->scope 			= $config['scope'];
+		$this->redirect_uri  = $config['redirect_uri'];
+		$this->client_id     = $config['client_id'];
+		$this->client_secret = $config['client_secret'];
+		$this->state         = $config['state'];
+		$this->scope         = $config['scope'];
 		
-		$this->access_token		= $this->CI->session->userdata('access_token');
+		$this->access_token  = $this->CI->session->userdata('access_token');
 	}
 	
 	public function get_login_url()
