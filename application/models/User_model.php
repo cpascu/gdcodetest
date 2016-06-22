@@ -25,6 +25,29 @@ class User_model extends Base_model {
 		return $this->_primaryKey;
 	}
 
+	protected function _sanitize (array $data)
+	{
+		foreach ($data as $index => &$d)
+		{
+			switch ($index)
+			{
+				case 'userId':
+					$d = (int)$d;
+					break;
+				case 'password':
+					$d = password_hash($d, PASSWORD_BCRYPT);
+					break;
+				case 'username':
+				case 'email':
+				case 'type':
+					$d = trim($d);
+					break;
+			}
+		}
+
+		return $data;
+	}
+
 	/**
 	 * Add a user.
 	 *
@@ -60,28 +83,5 @@ class User_model extends Base_model {
 
 			return false;
 		}
-	}
-
-	protected function _sanitize (array $data)
-	{
-		foreach ($data as $index => &$d)
-		{
-			switch ($index)
-			{
-				case 'password':
-					$d = password_hash($d, PASSWORD_BCRYPT);
-					break;
-				case 'userId':
-					$d = (int)$d;
-					break;
-				case 'username':
-				case 'email':
-				case 'type':
-				case 'token':
-					break;
-			}
-		}
-
-		return $data;
 	}
 }
