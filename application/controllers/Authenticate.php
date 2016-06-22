@@ -20,6 +20,11 @@ class Authenticate extends BASE_Controller {
 	{
 		$this->load->helper('form');
 		$this->load->config('facebook');
+		$this->load->config('github');
+		$this->load->library('github');
+
+		$this->pageData['githubLogin'] = $this->github->get_login_url();
+
 		$this->_pageLayout = 'login';
 		$this->_build();
 	}
@@ -157,9 +162,19 @@ class Authenticate extends BASE_Controller {
 		$this->_api_response($response);
 	}
 
-	public function github_post()
+	public function github_callback()
 	{
-		$this->load->library('github');	
+		$this->load->library('github');
+
+		// authorize with github
+		if (false === $this->github->authorize())
+		{
+			redirect('login','refresh');
+		}
+		else
+		{
+			
+		}
 	}
 
 	/**
@@ -171,8 +186,8 @@ class Authenticate extends BASE_Controller {
 	 */
 	private function _start_session(array $data)
 	{
-		$this->load->library('user');
+		//$this->load->library('user');
 
-		$this->user::save_session($data);
+		//$this->user::save_session($data);
 	}
 }

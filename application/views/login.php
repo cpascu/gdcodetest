@@ -15,7 +15,7 @@
 </head>
 <body>
 	<button class="js-facebook">Facebook</button>
-	<button class="js-github">Github</button>
+	<a href="<?= $githubLogin ?>">Github</a>
 	<?= form_open('api/login', array('class' => 'js-auth')); ?>
 	<div>
 	<?= form_input(array(
