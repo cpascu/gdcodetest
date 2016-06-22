@@ -64,7 +64,7 @@ class Authenticate extends BASE_Controller {
 			}
 		}
 
-		$this->api_response($response);
+		$this->_api_response($response);
 	}
 
 	public function register_post()
@@ -105,7 +105,7 @@ class Authenticate extends BASE_Controller {
 			}
 		}
 
-		$this->api_response($response);
+		$this->_api_response($response);
 	}
 
 	public function facebook_post()
@@ -118,40 +118,16 @@ class Authenticate extends BASE_Controller {
 
 		if (!empty($this->facebook->is_authenticated()))
 		{
-			$userFB = $this->facebook->request('get', '/me?fields=id,name,email');
+			$fbUser = $this->facebook->request('get', '/me?fields=id,name,email');
 
-			$user = $this->user_model->get_user(array('email' => $userFB->email));
-
-			if (false !== $user)
+			if ($this->_save_from_social(array('email' => $fbUser['email'], 'type' => 'facebook')))
 			{
-				if (false !== strpos($user->type, 'facebook'))
-				{
-					// update with facebook type
-					$data = array(
-						'userId' => $user->userId,
-						'type'   => $user->type . ',facebook'
-					);
-
-					$this->user_model->update_record($data);
-
-					$response['success'] = true;
-				}
+				$response['success'] = true;
+				// TODO: login user
 			}
 			else
 			{
-				$data = array(
-					'email' => $user->email,
-					'type'  => 'facebook'
-				);
-
-				if (false === $this->user_model->add_user($data))
-				{
-					$response['errors']['general'] = 'Failed to add account.';
-				}
-				else
-				{
-					$response['success'] = true;
-				}
+				$response['errors']['general'] = 'Failed to add account.';
 			}
 		}
 		else
@@ -169,11 +145,85 @@ class Authenticate extends BASE_Controller {
 		// authorize with github
 		if (false === $this->github->authorize())
 		{
-			redirect('login','refresh');
+			redirect('login');
 		}
 		else
 		{
-			
+			// get emails associated with account from github
+			$emails = $this->github->curl('user/emails', 'GET');
+
+			if (empty($emails))
+			{
+				log_message('error', __METHOD__ . ': Github returned no emails.');
+
+				redirect('login');
+			}
+
+			// there could be several, pick the one set to primary
+			foreach ($emails as $email)
+			{
+				if ($email->primary)
+				{
+					$primaryEmail = $email->email;
+					break;
+				}
+			}
+
+			// should always have primary, but if no primary, just use the first one in the list
+			$primaryEmail = empty($primaryEmail) ? $emails[0]->email : $primaryEmail;
+
+			if ($this->_save_from_social(array('email' => $primaryEmail, 'type' => 'github')))
+			{
+				// TODO: login and redirect
+			}
+			else
+			{
+				// TODO: add general error on login screen
+				redirect('login');
+			}
+		}
+	}
+
+	private function _save_from_social(array $data)
+	{
+		if (empty($data['email']) || empty($data['type']))
+		{
+			log_message('error', __METHOD__ . ': Invalid or missing params.');
+
+			return false;
+		}
+
+		$this->load->model('user_model');
+
+		$user = $this->user_model->get_user(array('email' => $data['email']));
+
+		if (false !== $user)
+		{
+			// check if login type already exists
+			if (false == strpos($user->type, $data['type']))
+			{
+				// update with new type if needed
+				$data = array(
+					'userId' => $user->userId,
+					'type'   => $user->type . ',' . $data['type']
+				);
+
+				$this->user_model->update_record($data);
+			}
+
+			return true;
+		}
+		else
+		{
+			// user not found, let's add it
+			if (false === $this->user_model->add_user($data))
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 	}
 

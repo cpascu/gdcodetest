@@ -2,21 +2,13 @@
 
 require_once('Base_model.php');
 /**
- * User model
+ * User model.
  *
  * @author Cosmin Pascu <csmnpsc@gmail.com>
  */
 class User_model extends Base_model {
 	private $_tableName  = 'users';
 	private $_primaryKey = 'userId';
-	private $_columns    = array(
-		'userId', 
-		'username', 
-		'email', 
-		'password', 
-		'type', 
-		'token'
-	);
 
 	public function __construct()
 	{
@@ -49,16 +41,18 @@ class User_model extends Base_model {
 
 	public function get_user(array $data)
 	{
-		if (empty($data['username']))
+		if (!empty($data['username']) || !empty($data['email']))
+		{
+			$user = $this->get_record($data);
+			// there will be only 1 result, unique column
+			return !empty($user) ? $user[0] : false;
+		}
+		else
 		{
 			log_message('error', __METHOD__ . ': Missing required params.');
+
 			return false;
 		}
-
-		$user = $this->get_record($data);
-
-		// there will be only 1 result, unique column
-		return !empty($user) ? $user[0] : false;
 	}
 
 	protected function _sanitize (array $data)

@@ -60,7 +60,7 @@ abstract class BASE_Controller extends CI_Controller
 		$this->load->view($this->_pageLayout, $this->pageData);
 	}
 
-	protected function api_response($data) 
+	protected function _api_response($data) 
 	{
 		$this->output
 		        ->set_content_type('application/json')

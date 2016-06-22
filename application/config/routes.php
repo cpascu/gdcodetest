@@ -54,8 +54,9 @@ $route['404_override']         = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
-$route['^register']     = 'authenticate/register';
-$route['^login']        = 'authenticate/login';
-$route['^api/register'] = 'authenticate/register_post';
-$route['^api/login']    = 'authenticate/login_post';
-$route['^api/facebook'] = 'authenticate/facebook_post';
+$route['^register']         = 'authenticate/register';
+$route['^login']            = 'authenticate/login';
+$route['^api/register']     = 'authenticate/register_post';
+$route['^api/login']        = 'authenticate/login_post';
+$route['^api/facebook']     = 'authenticate/facebook_post';
+$route['^callback/github'] = 'authenticate/github_callback';

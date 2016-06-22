@@ -14,11 +14,6 @@ abstract class Base_model extends CI_Model
 
 	}
 
-	public function update($pKeyId, $data)
-	{
-		$data = $this->_sanitize($data);
-	}
-
 	public function add_record(array $data, $table = false)
 	{
 		$data = $this->_sanitize($data);
@@ -37,7 +32,14 @@ abstract class Base_model extends CI_Model
 		}
 	}
 
-	public function get_record(array $data, $table = false) 
+	/**
+	 * Get a record by params.
+	 *
+	 * @param  array   $data  The params to search by.
+	 *
+	 * @return mixed          The records found, empty array if nothing found, or false if failed.
+	 */
+	public function get_record(array $data) 
 	{
 		$this->db->select('*');
 		
@@ -46,7 +48,7 @@ abstract class Base_model extends CI_Model
 			$this->db->where($col, $val);
 		}
 
-		$query = $this->db->get(false === $table ? $this->_get_table_name() : $table);
+		$query = $this->db->get($this->_get_table_name());
 
 		if (false === $query) 
 		{
@@ -58,6 +60,13 @@ abstract class Base_model extends CI_Model
 		}
 	}
 
+	/**
+	 * Generic update record.
+	 *
+	 * @param  array  $data The data to update
+	 *
+	 * @return boolean      True if successful, false otherwise.
+	 */
 	public function update_record(array $data)
 	{
 		$pKey = $this->_get_primary_key();
@@ -69,25 +78,40 @@ abstract class Base_model extends CI_Model
 			return false;
 		}
 
-		$data = $this->_sanitize($data);
+		$data       = $this->_sanitize($data);
+		$primaryKey = $data[$pKey];
 
-		$this->db->update($this->_get_table_name, $data);
+		// remove primary key from input data
+		unset($data[$pKey]);
+
+		$query = $this->db->set($data)
+							->where($pKey, $primaryKey)
+							->update($this->_get_table_name());
+
+		return $query;
 	}
 
+	/**
+	 * Sanitize the data before insert/update.
+	 *
+	 * @param  array  $data The data going into the insert/update.
+	 *
+	 * @return array        The sanitized data.
+	 */
 	protected function _sanitize(array $data)
 	{
 		return $data;
 	}
 
 	/**
-	 * Function to get the table of the model.
+	 * Get the table of the model.
 	 *
 	 * @return string The primary key.
 	 */
 	abstract protected function _get_table_name();
 
 	/**
-	 * Funtion to get the primary key of the table.
+	 * Get the primary key of the table.
 	 *
 	 * @return string The primary key.
 	 */

@@ -24,7 +24,7 @@ class Github {
 			'redirect_uri'  => urlencode($this->CI->config->item('redirect_uri')),
 			'client_id'     => $this->CI->config->item('client_id'),
 			'client_secret' => $this->CI->config->item('client_secret'),
-			'state'         => $this->CI->session->userdata('session_id'),
+			'state'         => session_id(),
 			'scope'         => $this->CI->config->item('scope')
         );
 		
@@ -48,7 +48,7 @@ class Github {
 	
 	public function authorize()
 	{
-		$session_id = $this->CI->session->userdata('session_id');
+		$session_id = session_id();
 		$state = $this->CI->input->get('state');
 		$code = $this->CI->input->get('code');
 		
