@@ -53,10 +53,15 @@ $route['default_controller']   = 'authenticate';
 $route['404_override']         = '';
 $route['translate_uri_dashes'] = FALSE;
 
-
+// pages
 $route['^register']         = 'authenticate/register';
 $route['^login']            = 'authenticate/login';
+$route['^contacts']         = 'contacts/index';
+
+// api endpoint
 $route['^api/register']     = 'authenticate/register_post';
 $route['^api/login']        = 'authenticate/login_post';
 $route['^api/facebook']     = 'authenticate/facebook_post';
-$route['^callback/github'] = 'authenticate/github_callback';
+
+// callback endpoint
+$route['^callback/github']  = 'authenticate/github_callback';

@@ -45,4 +45,9 @@ class User {
 
 		return true;
 	}
+
+	public function get_userid()
+	{
+		return $this->session->user_id;
+	}
 }

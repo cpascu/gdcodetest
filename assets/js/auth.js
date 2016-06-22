@@ -1,5 +1,6 @@
 (function($){
 	$(document).ready(function() {
+		// generic form submission, for both login and register
 		$('.js-auth').submit(function() {
 			var $form = $('.js-auth'),
 			data      = $form.serialize(),
@@ -7,11 +8,15 @@
 
 			// create account
 			$.post(path, data, function(response) {
-				$('.js-error').remove();
+				if (response.success) {
+					window.location = base.siteUrl + 'contacts';
+				} else {
+					$('.js-error').remove();
 
-				if ('undefined' !== typeof(response.errors)) {
-					for (type in response.errors) {
-						$('.js-' + type).after('<div class="js-error error">' + response.errors[type] + '</div>');
+					if ('undefined' !== typeof(response.errors)) {
+						for (type in response.errors) {
+							$('.js-' + type).after('<div class="js-error error">' + response.errors[type] + '</div>');
+						}
 					}
 				}
 			});
@@ -23,13 +28,16 @@
 			FB.login(function(response) {
 				if (response.status === 'connected') {
 					$.post(base.siteUrl + 'api/facebook', {}, function(response) {
-						console.dir(response);
+						if (response.success) {
+							window.location = base.siteUrl + 'contacts';
+						} else {
+							// TODO: Show general error.
+						}
 					});
 				} else if (response.status === 'not_authorized') {
-					// The person is logged into Facebook, but not your app.
+					// Do nothing, they know what they did.
 				} else {
-					// The person is not logged into Facebook, so we're not sure if
-					// they are logged into this app or not.
+					// Do nothing, they know what they did.
 				}
 			}, {scope: 'email'});
 		});

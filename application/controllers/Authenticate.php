@@ -183,10 +183,12 @@ class Authenticate extends BASE_Controller {
 			$primaryEmail = empty($primaryEmail) ? $emails[0]->email : $primaryEmail;
 			$userId       = $this->_save_from_social(array('email' => $primaryEmail, 'type' => 'github'));
 
-			if (false === $userId)
+			if (false !== $userId)
 			{
 				$this->load->library('user');
 				$this->user->login($userId, $primaryEmail);
+
+				redirect('contacts');
 			}
 			else
 			{
