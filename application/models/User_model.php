@@ -25,6 +25,13 @@ class User_model extends Base_model {
 		return $this->_primaryKey;
 	}
 
+	/**
+	 * Add a user.
+	 *
+	 * @param array $data The userdata.
+	 *
+	 * @return  mixed     The userId if successful, false otherwise.
+	 */
 	public function add_user(array $data)
 	{
 		if ( empty($data['email']) ||

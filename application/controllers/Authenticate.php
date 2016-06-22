@@ -56,6 +56,9 @@ class Authenticate extends BASE_Controller {
 
 			if (false !== $user && password_verify($this->input->post('password'), $user->password))
 			{
+				$this->load->library('user');
+				$this->user->login($user->userId, $user->email);
+
 				$response['success'] = true;
 			}
 			else
@@ -95,12 +98,17 @@ class Authenticate extends BASE_Controller {
 				'type'     => 'site'
 			);
 
-			if (false === $this->user_model->add_user($data))
+			$userId = $this->user_model->add_user($data);
+
+			if (false === $userId)
 			{
 				$response['errors']['general'] = 'Failed to add account.';
 			}
 			else
 			{
+				$this->load->library('user');
+				$this->user->login($userId, $data['email']);
+
 				$response['success'] = true;
 			}
 		}
@@ -119,11 +127,13 @@ class Authenticate extends BASE_Controller {
 		if (!empty($this->facebook->is_authenticated()))
 		{
 			$fbUser = $this->facebook->request('get', '/me?fields=id,name,email');
+			$userId = $this->_save_from_social(array('email' => $fbUser['email'], 'type' => 'facebook'));
 
-			if ($this->_save_from_social(array('email' => $fbUser['email'], 'type' => 'facebook')))
+			if (false !== $userId)
 			{
+				$this->load->library('user');
+				$this->user->login($userId, $fbUser['email']);
 				$response['success'] = true;
-				// TODO: login user
 			}
 			else
 			{
@@ -171,10 +181,12 @@ class Authenticate extends BASE_Controller {
 
 			// should always have primary, but if no primary, just use the first one in the list
 			$primaryEmail = empty($primaryEmail) ? $emails[0]->email : $primaryEmail;
+			$userId       = $this->_save_from_social(array('email' => $primaryEmail, 'type' => 'github'));
 
-			if ($this->_save_from_social(array('email' => $primaryEmail, 'type' => 'github')))
+			if (false === $userId)
 			{
-				// TODO: login and redirect
+				$this->load->library('user');
+				$this->user->login($userId, $primaryEmail);
 			}
 			else
 			{
@@ -211,33 +223,12 @@ class Authenticate extends BASE_Controller {
 				$this->user_model->update_record($data);
 			}
 
-			return true;
+			return $user->userId;
 		}
 		else
 		{
 			// user not found, let's add it
-			if (false === $this->user_model->add_user($data))
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			return $this->user_model->add_user($data);
 		}
-	}
-
-	/**
-	 * Starts the session.
-	 *
-	 * @param  array  $data Array containing email and userId.
-	 *
-	 * @return void
-	 */
-	private function _start_session(array $data)
-	{
-		//$this->load->library('user');
-
-		//$this->user::save_session($data);
 	}
 }
