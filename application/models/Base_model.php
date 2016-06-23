@@ -14,11 +14,32 @@ abstract class Base_model extends CI_Model
 
 	}
 
-	public function add_record(array $data, $table = false)
+	/**
+	 * Get the table of the model.
+	 *
+	 * @return string The primary key.
+	 */
+	abstract protected function _get_table_name();
+
+	/**
+	 * Get the primary key of the table.
+	 *
+	 * @return string The primary key.
+	 */
+	abstract protected function _get_primary_key();
+
+	/**
+	 * Generic add record to database.
+	 *
+	 * @param array $data The record data.
+	 *
+	 * @return mixed      The primary id of the newly added record, or false if failed.
+	 */
+	public function add_record(array $data)
 	{
 		$data = $this->_sanitize($data);
 
-		$this->db->insert(false === $table ? $this->_get_table_name() : $table, $data);
+		$this->db->insert($this->_get_table_name(), $data);
 
 		if ($this->db->affected_rows() > 0)
 		{
@@ -92,6 +113,29 @@ abstract class Base_model extends CI_Model
 	}
 
 	/**
+	 * Generic remove record from database.
+	 *
+	 * @param  int $primaryId The id of the record.
+	 *
+	 * @return boolean        True if delete successful, false otherwise.
+	 */
+	public function delete_record($primaryId)
+	{
+		if (!is_numeric($primaryId))
+		{
+			log_message('error', __METHOD__ . ': Primary key must be numeric.');
+
+			return false;
+		}
+
+		$primaryId = (int)$primaryId;
+
+		$query = $this->db->where($this->_get_primary_key, $primaryId)->delete();
+		
+		return false === $query ? false : true;
+	}
+
+	/**
 	 * Sanitize the data before insert/update.
 	 *
 	 * @param  array  $data The data going into the insert/update.
@@ -103,17 +147,4 @@ abstract class Base_model extends CI_Model
 		return $data;
 	}
 
-	/**
-	 * Get the table of the model.
-	 *
-	 * @return string The primary key.
-	 */
-	abstract protected function _get_table_name();
-
-	/**
-	 * Get the primary key of the table.
-	 *
-	 * @return string The primary key.
-	 */
-	abstract protected function _get_primary_key();
 }

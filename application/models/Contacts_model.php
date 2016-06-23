@@ -71,8 +71,30 @@ class Contacts_model extends Base_model {
 			return false;
 		}
 
+		//TODO: update activecampaign
 		$userId = $this->add_record($data);
 
 		return (false !== $userId) ? $userId : false;
+	}
+
+	public function update_contact(array $data)
+	{
+		//TODO: update activecampaign
+		return $this->update_record($data);
+	}
+
+	public function delete_contact($contactId)
+	{
+		if (!empty($contactId) && !is_numeric($contactId))
+		{
+			log_message('error', __METHOD__ . ': Contact id must be numeric.');
+
+			return false;
+		}
+
+		$user = $this->get_record(array('userId' => $contactId);
+
+		// TODO: update activecampagin based on $user->email
+		return $this->delete_record($contactId);
 	}
 }

@@ -4,18 +4,18 @@
  * User library.
  */
 class User {
-	private $_ci;
+	private $_CI;
 
 	public function __construct()
 	{
-		$this->ci =& get_instance();
+		$this->_CI =& get_instance();
 	}
 
 	public function is_logged_in()
 	{
 		// if userId is not set or session_id mismatch, not logged in
-		if (session_id() !== $this->ci->session->session_id ||
-			empty($this->ci->session->user_id))
+		if (session_id() !== $this->_CI->session->session_id ||
+			empty($this->_CI->session->user_id))
 		{
 			return false;
 		}
@@ -32,9 +32,9 @@ class User {
 			return false;
 		}
 
-		$this->ci->session->session_id = session_id();
-		$this->ci->session->user_id    = $userId;
-		$this->ci->session->user_email = $userEmail;
+		$this->_CI->session->session_id = session_id();
+		$this->_CI->session->user_id    = $userId;
+		$this->_CI->session->user_email = $userEmail;
 
 		return true;
 	}
@@ -48,6 +48,6 @@ class User {
 
 	public function get_userid()
 	{
-		return $this->session->user_id;
+		return $this->_CI->session->user_id;
 	}
 }
