@@ -1,10 +1,10 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-require_once(dirname(__FILE__) . '/../third_party/activecampaign/autoload.php');
+require_once(dirname(__FILE__) . '/../third_party/activecampaign/ActiveCampaign.class.php');
 
 /**
  * Active campaign wrapper.
  */
-class Activecampaign {
+class Activecampaign_wrapper {
 	private $_CI;
 	private $_AC;
 
@@ -105,7 +105,7 @@ class Activecampaign {
 		}
 
 		// fetch the contact info, we need contact id
-		$request = $this->_AC->api('contact/view_email', $data)
+		$request = $this->_AC->api('contact/view_email', $data);
 
 		if (!(int)$request->success)
 		{

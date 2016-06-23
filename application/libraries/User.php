@@ -39,7 +39,6 @@ class User {
 	public function logout()
 	{
 		session_destroy();
-
 		return true;
 	}
 

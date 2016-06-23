@@ -14,7 +14,7 @@
 					$('.js-error').remove();
 
 					if ('undefined' !== typeof(response.errors)) {
-						for (type in response.errors) {
+						for (var type in response.errors) {
 							$('.js-' + type).after('<div class="js-error error">' + response.errors[type] + '</div>');
 						}
 					}

@@ -33,6 +33,7 @@ class Contacts_model extends Base_model {
 			{
 				case 'contactId':
 				case 'userId':
+				case 'synced':
 					$d = (int)$d;
 					break;
 				case 'name':
@@ -73,8 +74,8 @@ class Contacts_model extends Base_model {
 
 		if (!empty($data['email']))
 		{
-			$this->load->library('activecampaign');
-			$data['synced'] = $this->activecampaign->sync($data);
+			$this->load->library('activecampaign_wrapper');
+			$data['synced'] = $this->activecampaign_wrapper->sync_contact($data);
 		}
 
 		$userId = $this->add_record($data);
@@ -93,8 +94,8 @@ class Contacts_model extends Base_model {
 
 		if (!empty($data['email']))
 		{
-			$this->load->library('activecampaign');
-			$data['synced'] = $this->activecampaign->sync($data);
+			$this->load->library('activecampaign_wrapper');
+			$data['synced'] = $this->activecampaign_wrapper->sync_contact($data);
 		}
 
 		return $this->update_record($data);
@@ -108,12 +109,12 @@ class Contacts_model extends Base_model {
 			return false;
 		}
 
-		$contact = $this->get_record(array('contactId' => $contactId);
+		$contact = $this->get_record(array('contactId' => $contactId));
 
 		if (!empty($contact->email))
 		{
-			$this->load->library('activecampaign');
-			$data['synced'] = $this->activecampaign->sync(array('email' => $contact->email));
+			$this->load->library('activecampaign_wrapper');
+			$data['synced'] = $this->activecampaign_wrapper->delete_contact(array('email' => $contact->email));
 		}
 
 		return $this->delete_record($contactId);
