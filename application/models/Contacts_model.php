@@ -71,7 +71,12 @@ class Contacts_model extends Base_model {
 			return false;
 		}
 
-		//TODO: update activecampaign
+		if (!empty($data['email']))
+		{
+			$this->load->library('activecampaign');
+			$data['synced'] = $this->activecampaign->sync($data);
+		}
+
 		$userId = $this->add_record($data);
 
 		return (false !== $userId) ? $userId : false;
@@ -79,22 +84,38 @@ class Contacts_model extends Base_model {
 
 	public function update_contact(array $data)
 	{
-		//TODO: update activecampaign
+		// need at least a name
+		if (empty($data['name']))
+		{
+			log_message('error', __METHOD__ . ': Failed to add contact, missing or invalid params.');
+			return false;
+		}
+
+		if (!empty($data['email']))
+		{
+			$this->load->library('activecampaign');
+			$data['synced'] = $this->activecampaign->sync($data);
+		}
+
 		return $this->update_record($data);
 	}
 
 	public function delete_contact($contactId)
 	{
-		if (!empty($contactId) && !is_numeric($contactId))
+		if (!empty($contactId) || !is_numeric($contactId))
 		{
-			log_message('error', __METHOD__ . ': Contact id must be numeric.');
-
+			log_message('error', __METHOD__ . ': Missing or invalid contactId.');
 			return false;
 		}
 
-		$user = $this->get_record(array('userId' => $contactId);
+		$contact = $this->get_record(array('contactId' => $contactId);
 
-		// TODO: update activecampagin based on $user->email
+		if (!empty($contact->email))
+		{
+			$this->load->library('activecampaign');
+			$data['synced'] = $this->activecampaign->sync(array('email' => $contact->email));
+		}
+
 		return $this->delete_record($contactId);
 	}
 }

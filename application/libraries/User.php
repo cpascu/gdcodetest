@@ -13,9 +13,7 @@ class User {
 
 	public function is_logged_in()
 	{
-		// if userId is not set or session_id mismatch, not logged in
-		if (session_id() !== $this->_CI->session->session_id ||
-			empty($this->_CI->session->user_id))
+		if (empty($this->_CI->session->user_id))
 		{
 			return false;
 		}
@@ -32,7 +30,6 @@ class User {
 			return false;
 		}
 
-		$this->_CI->session->session_id = session_id();
 		$this->_CI->session->user_id    = $userId;
 		$this->_CI->session->user_email = $userEmail;
 
