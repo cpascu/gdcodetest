@@ -23,16 +23,10 @@
 			}
 
 			$('.js-form-add').submit(function() {
-				var $form   = $(this),
-				contactsIdx = self.addContact($form) - 1; // add new contact and get location
-				
-				// refresh the list first, we want screen to update right away
-				if (contactsIdx) {
-					self.refreshContactList();
-				}
+				var $form   = $(this);
 
 				// send data to backend
-				self.submitForm($form, contactsIdx);
+				self.submitForm($form);
 
 				return false;
 			});
@@ -55,31 +49,29 @@
 			}
 		}
 
-		ContactsModule.prototype.submitForm = function($form, contactsIdx) {
+		ContactsModule.prototype.submitForm = function($form) {
 			var self    = this,
 			data        = $form.serialize(),
-			path        = $form.attr('action'),
-			contactsIdx = 'undefined' !== typeof contactsIdx ? contactsIdx : false;
+			path        = $form.attr('action');
 
 			// create account
 			$.post(path, data, function(response) {
 				if (response.success) {
-					// update contact id
-					self.contacts[contactsIdx].contactId = response.contactId;
+					self.syncContactList($form, 'undefined' !== typeof response.contactIdx ? response.contactIdx : false);
+					self.refreshContactList();
 				}
 				else
 				{
-					// show that there was an error, show retry or delete
-					// 
-					// just realized this is bad UX... will need to add pthread... bleh
+					// show the errors on the form
 				}
 			});
 		}
 
-		ContactsModule.prototype.addContact = function($form) {
-			var self = this,
-			data     = $form.serializeArray(),
-			contact  = {};
+		ContactsModule.prototype.syncContactList = function($form, pushToIdx) {
+			var self  = this,
+			data      = $form.serializeArray(),
+			contact   = {},
+			pushToIdx = 'undefined' !== typeof pushToIdx ? pushToIdx : false;
 
 			for (var i in data) {
 				if (data[i].value.length > 0) {
@@ -88,9 +80,13 @@
 			}
 
 			if (!$.isEmptyObject(contact)) {
-				self.contacts.push(contact);
+				if (false === pushToIdx) {
+					self.contacts.push(contact);
+				} else {
+					self.contacts[pushToIdx] = contact;
+				}
 
-				return self.contacts.length;
+				return true;
 			}
 
 			return false;
