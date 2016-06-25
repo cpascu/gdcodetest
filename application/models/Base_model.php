@@ -91,7 +91,7 @@ abstract class Base_model extends CI_Model
 	 *
 	 * @return boolean      True if successful, false otherwise.
 	 */
-	public function update_record(array $data, $sanitize)
+	public function update_record(array $data, $sanitize = true)
 	{
 		$pKey = $this->_get_primary_key();
 
