@@ -24,95 +24,73 @@ class AsyncAC extends CI_Controller {
 	/**
 	 * Sync a contact with Active Campaign.
 	 *
-	 * @param string $data Firstly json_encoded and secondly urlencoded string containing contact data.
+	 * @param string $contactId The contact id in our database.
 	 *
 	 * @return void
 	 */
-	public function sync_contact($data)
+	public function sync_contact($contactId)
 	{
 		if (!$this->input->is_cli_request())
 		{
 			$this->_finish(1);
 		}
 
-		if (empty($data))
+		if (empty($contactId))
 		{
-			log_message('error', __METHOD__ . ': Missing data.');
+			log_message('error', __METHOD__ . ': Missing contactId.');
 			$this->_finish(1);
 		}
 
-		$data = (array)json_decode(urldecode($data));
+		$this->load->model('contacts_model');
+		$contact = $this->contacts_model->get_record(array('contactId' => $contactId));
+		
+		$contact = !empty($contact[0]) ? (array)$contact[0] : false;
 
-		// check if was valid json
-		if (empty($data))
+		if (!empty($contact))
 		{
-			log_message('error', __METHOD__ . ': Invalid data.');
-			$this->_finish(1);
+			$this->load->library('activecampaign_wrapper');
+			$acId = $this->activecampaign_wrapper->sync_contact($contact);
+
+			if (!empty($acId))
+			{
+				$this->contacts_model->update_record(array(
+					'contactId' => (int)$contact['contactId'],
+					'acId'      => (int)$acId,
+					'synced'    => 1
+				), false);
+			}	
 		}
 		else
 		{
-			$this->load->library('activecampaign_wrapper');
-
-			if ($this->activecampaign_wrapper->sync_contact($data))
-			{
-				if (!empty($data['contactId']))
-				{
-					$this->load->model('contacts_model');
-					$this->contacts_model->update_record(array(
-						'contactId' => (int)$data['contactId'],
-						'synced'    => 1
-					), false);
-				}
-			}
+			log_message('error', __METHOD__ . ": Could not find contact by contactId: {$contactId}");
+			$this->_finish(1);
 		}
-
+		
 		$this->_finish(0);
 	}
 
 	/**
 	 * Delete a contact from Active Campaign.
 	 *
-	 * @param string $data Firstly json_encoded and secondly urlencoded string containing contact data, must have email.
+	 * @param string $acId The activecampaign contact id.
 	 *
 	 * @return void
 	 */
-	public function delete_contact($data)
+	public function delete_contact($acId)
 	{
 		if (!$this->input->is_cli_request())
 		{
 			$this->_finish(1);
 		}
 
-		if (empty($data))
+		if (empty($acId))
 		{
-			log_message('error', __METHOD__ . ': Missing data.');
+			log_message('error', __METHOD__ . ': Missing acId.');
 			$this->_finish(1);
 		}
 
-		$data = (array)json_decode(urldecode($data));
-
-		// check if was valid json
-		if (empty($data))
-		{
-			log_message('error', __METHOD__ . ': Invalid data.');
-			$this->_finish(1);
-		}
-		else
-		{
-			$this->load->library('activecampaign_wrapper');
-
-			if ($this->activecampaign_wrapper->delete_contact($data))
-			{
-				if (!empty($data['contactId']))
-				{
-					$this->load->model('contacts_model');
-					$this->contacts_model->update_record(array(
-						'contactId' => (int)$data['contactId'],
-						'synced'    => 1
-					), false);
-				}
-			}
-		}
+		$this->load->library('activecampaign_wrapper');
+		$this->activecampaign_wrapper->delete_contact($acId);
 	}
 
 	private function _finish($exitCode = 0)

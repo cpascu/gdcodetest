@@ -43,6 +43,8 @@ class Activecampaign_wrapper {
 		{
 			switch ($key)
 			{
+				case 'acId':
+					$acData['id'] = $d;
 				case 'email':
 					$acData['email'] = $d;
 					break;
@@ -85,7 +87,25 @@ class Activecampaign_wrapper {
 		}
 
 		$acData  = $this->_get_ac_data($data);
-		$request = $this->_AC->api('contact/sync', $acData);
+
+		// the contact might already exist - AC api only lets us sync by email, but what if we want to change the email
+		if (!empty($acData['id']))
+		{
+			// try updating by id first
+			$request = $this->_AC->api('contact/edit', $acData);
+
+			if (!(int)$request->success)
+			{
+				// add by sync otherwise
+				unset($acData['id']);
+				$request = $this->_AC->api('contact/sync', $acData);
+			}
+		}
+		else
+		{
+			// add by sync, clearly does not exist
+			$request = $this->_AC->api('contact/sync', $acData);
+		}
 
 		if (!(int)$request->success)
 		{
@@ -93,28 +113,19 @@ class Activecampaign_wrapper {
 			return false;
 		}
 
-		return true;
+		return $request->subscriber_id;
 	}
 
-	public function delete_contact($data)
+	public function delete_contact($acId)
 	{
-		if (empty($data['email']))
+		if (empty($acId))
 		{
-			log_message('error', __METHOD__ . ': Missing email field.');
-			return false;
-		}
-
-		// fetch the contact info, we need contact id
-		$request = $this->_AC->api('contact/view_email', $data);
-
-		if (!(int)$request->success)
-		{
-			log_message('error', __METHOD__ . ": {$request->error}");
+			log_message('error', __METHOD__ . ': Missing acId.');
 			return false;
 		}
 
 		$deleteData = array(
-			'id' => $request->id
+			'id' => $acId
 		);
 
 		// delete the contact from activecampaign

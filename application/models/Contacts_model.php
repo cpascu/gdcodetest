@@ -33,6 +33,7 @@ class Contacts_model extends Base_model {
 			{
 				case 'contactId':
 				case 'userId':
+				case 'acId':
 				case 'synced':
 					$d = (int)$d;
 					break;
@@ -76,13 +77,11 @@ class Contacts_model extends Base_model {
 
 		if (false !== $contactId)
 		{
-			$data['contactId'] = $contactId;
-
 			if (!empty($data['email']))
 			{
 				// run backgroud job to sync with ActiveCampaign
 				$this->load->helper('async');
-				Async::run('cli/contact/sync', $data);
+				Async::run('cli/contact/sync', $contactId);
 			}
 
 			return $contactId;
@@ -94,7 +93,7 @@ class Contacts_model extends Base_model {
 	public function update_contact(array $data)
 	{
 		// need at least a name
-		if (empty($data['name']))
+		if (empty($data['contactId']) || empty($data['name']))
 		{
 			log_message('error', __METHOD__ . ': Failed to add contact, missing or invalid params.');
 			return false;
@@ -105,7 +104,7 @@ class Contacts_model extends Base_model {
 			if (!empty($data['email']))
 			{
 				$this->load->helper('async');
-				Async::run('cli/contact/sync', $data);
+				Async::run('cli/contact/sync', $data['contactId']);
 			}
 
 			return true;
@@ -124,10 +123,10 @@ class Contacts_model extends Base_model {
 
 		$contact = $this->get_record(array('contactId' => $contactId));
 
-		if (!empty($contact->email))
+		if (!empty($contact->acId))
 		{
 			$this->load->helper('async');
-			Async::run('cli/contact/delete', array('email' => $contact->email));
+			Async::run('cli/contact/delete', $contact->acId);
 		}
 
 		return $this->delete_record($contactId);
