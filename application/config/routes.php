@@ -49,23 +49,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller']   = 'authenticate';
-$route['404_override']         = '';
-$route['translate_uri_dashes'] = FALSE;
+$route['default_controller']      = 'authenticate/login';
+$route['404_override']            = '';
+$route['translate_uri_dashes']    = FALSE;
 
 // pages
-$route['^register']         = 'authenticate/register';
-$route['^login']            = 'authenticate/login';
-$route['^contacts']         = 'contacts/index';
+$route['^register']               = 'authenticate/register';
+$route['^login']                  = 'authenticate/login';
+$route['^contacts']               = 'contacts/index';
 
 // api endpoint
-$route['^api/register']       = 'authenticate/register_post';
-$route['^api/login']          = 'authenticate/login_post';
-$route['^api/facebook']       = 'authenticate/facebook_post';
-$route['^api/contact/add']    = 'contacts/add_contact_post';
-$route['^api/contact/update'] = 'contacts/update_contact_post';
-$route['^api/contact/remove'] = 'contacts/delete_contact_post';
-$route['^api/contact/search'] = 'contacts/search_contact_post';
+$route['^api/register']           = 'authenticate/register_post';
+$route['^api/login']              = 'authenticate/login_post';
+$route['^api/facebook']           = 'authenticate/facebook_post';
+$route['^api/contact/add']        = 'contacts/add_contact_post';
+$route['^api/contact/update']     = 'contacts/update_contact_post';
+$route['^api/contact/remove']     = 'contacts/delete_contact_post';
+$route['^api/contact/search']     = 'contacts/search_contact_post';
 
 // callback endpoint
-$route['^callback/github']  = 'authenticate/github_callback';
+$route['^callback/github']        = 'authenticate/github_callback';
+
+// cli
+$route['cli/contact/sync/(.*)']   = 'cli/asyncac/sync_contact/$1';
+$route['cli/contact/delete/(.*)'] = 'cli/asyncac/delete_contact/$1';
