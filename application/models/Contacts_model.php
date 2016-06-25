@@ -1,5 +1,4 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
-require_once(dirname(__FILE__) . '/../traits/Async.php');
 
 require_once('Base_model.php');
 /**
@@ -8,8 +7,6 @@ require_once('Base_model.php');
  * @author Cosmin Pascu <csmnpsc@gmail.com>
  */
 class Contacts_model extends Base_model {
-	use Async;
-
 	private $_tableName  = 'contacts';
 	private $_primaryKey = 'contactId';
 
@@ -77,7 +74,8 @@ class Contacts_model extends Base_model {
 
 		if (!empty($data['email']))
 		{
-			$this->async('cli/contact/sync', $data);
+			$this->load->helper('async');
+			Async::run('cli/contact/sync', $data);
 		}
 
 		$userId = $this->add_record($data);
@@ -96,7 +94,8 @@ class Contacts_model extends Base_model {
 
 		if (!empty($data['email']))
 		{
-			$this->async('cli/contact/sync', $data);
+			$this->load->helper('async');
+			Async::run('cli/contact/sync', $data);
 		}
 
 		return $this->update_record($data);
@@ -114,7 +113,8 @@ class Contacts_model extends Base_model {
 
 		if (!empty($contact->email))
 		{
-			$this->async('cli/contact/delete', array('email' => $contact->email));
+			$this->load->helper('async');
+			Async::run('cli/contact/delete', array('email' => $contact->email));
 		}
 
 		return $this->delete_record($contactId);

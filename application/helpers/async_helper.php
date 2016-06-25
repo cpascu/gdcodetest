@@ -1,8 +1,12 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
-
-trait Async
+/**
+ * Helper for running CodeIgniter CLI commands asynchronousy on the server.
+ *
+ * @author Cosmin Pascu <csmnpsc@gmail.com>
+ */
+abstract class Async
 {
-	public function async($path, $data)
+	static public function run($path, $data)
 	{
 		if (empty($path))
 		{
@@ -15,6 +19,8 @@ trait Async
 
 		log_message('info', __METHOD__ . ": Queue async command: {$path}/{$data}");
 		
+		// command will run as background job, all output piped to /dev/null
 		exec($command);
-	}
+	}	
 }
+?>

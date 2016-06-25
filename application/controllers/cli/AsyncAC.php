@@ -2,6 +2,8 @@
 
 /**
  * ActiveCampaign CLI controller, allows commands to be run from CLI.
+ *
+ * @author  Cosmin Pascu <csmnpsc@gmail.com>
  */
 class AsyncAC extends CI_Controller {
 	private $_pid = false;
@@ -53,7 +55,6 @@ class AsyncAC extends CI_Controller {
 			$this->activecampaign_wrapper->sync_contact((array)$data);
 		}
 
-		log_message('info', __METHOD__ . ': Finished async command ');
 		$this->_finish(0);
 	}
 
