@@ -30,6 +30,8 @@
 
 				return false;
 			});
+
+			self.refreshContactList();
 		}
 
 		ContactsModule.prototype.refreshContactList = function() {

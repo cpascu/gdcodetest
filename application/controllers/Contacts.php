@@ -20,8 +20,8 @@ class Contacts extends BASE_Controller {
 		$this->load->helper('form');
 
 		$userId   = $this->user->get_userid();
-		$contacts = $this->contacts_model->get_record(array('userId', $userId));
-		
+		$contacts = $this->contacts_model->get_record(array('userId' => $userId));
+
 		$this->pageData['js']['userId']   = $userId;
 		$this->pageData['js']['contacts'] = $contacts;
 
@@ -47,9 +47,9 @@ class Contacts extends BASE_Controller {
 		{
 			$this->load->model('contacts_model');
 
-			$data = $this->input->post(NULL, true);
-
-			$contactId = $this->contacts_model->add_contact($data);
+			$data           = $this->input->post(NULL, true);
+			$data['userId'] = $this->user->get_userid();
+			$contactId      = $this->contacts_model->add_contact($data);
 
 			if (false !== $contactId)
 			{
@@ -65,12 +65,41 @@ class Contacts extends BASE_Controller {
 		$this->_api_response($response);
 	}
 
-	public function delete_contact_post()
+	public function update_contact_post()
 	{
+		$this->load->library('form_validation');
 
+		$response = array(
+			'success' => false
+		);
+
+		$this->form_validation->set_rules('contactId', 'Contact ID', 'required');
+		$this->form_validation->set_rules('name', 'Name', 'required|max_length[15]');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$response['errors']  = $this->form_validation->error_array();
+		}
+		else
+		{
+			$this->load->model('contacts_model');
+
+			$data = $this->input->post(NULL, true);
+
+			if ($this->contacts_model->update_contact($data))
+			{
+				$response['success'] = true;
+			}
+			else
+			{
+				$response['errors']['general'] = 'Failed to update contact.';
+			}
+		}
+
+		$this->_api_response($response);
 	}
 
-	public function update_contact_post()
+	public function delete_contact_post()
 	{
 
 	}
