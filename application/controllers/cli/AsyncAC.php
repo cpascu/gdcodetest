@@ -41,7 +41,7 @@ class AsyncAC extends CI_Controller {
 			$this->_finish(1);
 		}
 
-		$data = json_decode(urldecode($data));
+		$data = (array)json_decode(urldecode($data));
 
 		// check if was valid json
 		if (empty($data))
@@ -52,7 +52,18 @@ class AsyncAC extends CI_Controller {
 		else
 		{
 			$this->load->library('activecampaign_wrapper');
-			$this->activecampaign_wrapper->sync_contact((array)$data);
+
+			if ($this->activecampaign_wrapper->sync_contact($data))
+			{
+				if (!empty($data['contactId']))
+				{
+					$this->load->model('contacts_model');
+					$this->contacts_model->update_record(array(
+						'contactId' => (int)$data['contactId'],
+						'synced'    => 1
+					), false);
+				}
+			}
 		}
 
 		$this->_finish(0);
@@ -78,7 +89,7 @@ class AsyncAC extends CI_Controller {
 			$this->_finish(1);
 		}
 
-		$data = json_decode(urldecode($data));
+		$data = (array)json_decode(urldecode($data));
 
 		// check if was valid json
 		if (empty($data))
@@ -89,7 +100,18 @@ class AsyncAC extends CI_Controller {
 		else
 		{
 			$this->load->library('activecampaign_wrapper');
-			$this->activecampaign_wrapper->delete_contact((array)$data);
+
+			if ($this->activecampaign_wrapper->delete_contact($data))
+			{
+				if (!empty($data['contactId']))
+				{
+					$this->load->model('contacts_model');
+					$this->contacts_model->update_record(array(
+						'contactId' => (int)$data['contactId'],
+						'synced'    => 1
+					), false);
+				}
+			}
 		}
 	}
 

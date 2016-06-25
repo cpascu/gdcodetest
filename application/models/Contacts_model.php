@@ -72,15 +72,23 @@ class Contacts_model extends Base_model {
 			return false;
 		}
 
-		if (!empty($data['email']))
+		$contactId = $this->add_record($data);
+
+		if (false !== $contactId)
 		{
-			$this->load->helper('async');
-			Async::run('cli/contact/sync', $data);
+			$data['contactId'] = $contactId;
+
+			if (!empty($data['email']))
+			{
+				// run backgroud job to sync with ActiveCampaign
+				$this->load->helper('async');
+				Async::run('cli/contact/sync', $data);
+			}
+
+			return $contactId;
 		}
 
-		$userId = $this->add_record($data);
-
-		return (false !== $userId) ? $userId : false;
+		return false;
 	}
 
 	public function update_contact(array $data)
@@ -92,13 +100,18 @@ class Contacts_model extends Base_model {
 			return false;
 		}
 
-		if (!empty($data['email']))
+		if ($this->update_record($data))
 		{
-			$this->load->helper('async');
-			Async::run('cli/contact/sync', $data);
+			if (!empty($data['email']))
+			{
+				$this->load->helper('async');
+				Async::run('cli/contact/sync', $data);
+			}
+
+			return true;
 		}
 
-		return $this->update_record($data);
+		return false;
 	}
 
 	public function delete_contact($contactId)

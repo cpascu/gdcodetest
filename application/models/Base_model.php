@@ -31,12 +31,14 @@ abstract class Base_model extends CI_Model
 	/**
 	 * Generic add record to database.
 	 *
-	 * @param array $data The record data.
+	 * @param array   $data     The record data.
+	 * @param boolean $sanitize Wether to sanitize the input before insert.
 	 *
 	 * @return mixed      The primary id of the newly added record, or false if failed.
 	 */
-	public function add_record(array $data)
+	public function add_record(array $data, $sanitize = true)
 	{
+		if ($sanitize)
 		$data = $this->_sanitize($data);
 
 		$this->db->insert($this->_get_table_name(), $data);
@@ -84,11 +86,12 @@ abstract class Base_model extends CI_Model
 	/**
 	 * Generic update record.
 	 *
-	 * @param  array  $data The data to update
+	 * @param array  $data The data to update
+	 * @param boolean $sanitize Wether to sanitize the input before insert.
 	 *
 	 * @return boolean      True if successful, false otherwise.
 	 */
-	public function update_record(array $data)
+	public function update_record(array $data, $sanitize)
 	{
 		$pKey = $this->_get_primary_key();
 
@@ -99,7 +102,11 @@ abstract class Base_model extends CI_Model
 			return false;
 		}
 
-		$data       = $this->_sanitize($data);
+		if ($sanitize)
+		{
+			$data = $this->_sanitize($data);
+		}
+
 		$primaryKey = $data[$pKey];
 
 		// remove primary key from input data
