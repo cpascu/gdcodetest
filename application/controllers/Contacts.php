@@ -1,6 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
+require_once(dirname(__FILE__) . '/../traits/ValidationRules.php');
 
 class Contacts extends BASE_Controller {
+	use ValidationRules;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -73,8 +76,16 @@ class Contacts extends BASE_Controller {
 			'success' => false
 		);
 
-		$this->form_validation->set_rules('contactId', 'Contact ID', 'required');
-		$this->form_validation->set_rules('name', 'Name', 'required|max_length[15]');
+		$this->form_validation->set_rules('contactId', 'Contact ID',    'required');
+		$this->form_validation->set_rules('name',      'Name',          'required|max_length[15]');
+		$this->form_validation->set_rules('surname',   'Surname',       'max_length[15]');
+		$this->form_validation->set_rules('email',     'Email',         'is_email|max_length[255]');
+		$this->form_validation->set_rules('phone',     'Phone',         'max_length[20]');
+		$this->form_validation->set_rules('custom1',   'Custom Fields', 'max_length[255]');
+		$this->form_validation->set_rules('custom2',   'Custom Fields', 'max_length[255]');
+		$this->form_validation->set_rules('custom3',   'Custom Fields', 'max_length[255]');
+		$this->form_validation->set_rules('custom4',   'Custom Fields', 'max_length[255]');
+		$this->form_validation->set_rules('custom5',   'Custom Fields', 'max_length[255]');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -83,6 +94,10 @@ class Contacts extends BASE_Controller {
 		else
 		{
 			$this->load->model('contacts_model');
+
+			// check if email is taken
+			$this->form_validation->reset_validation();
+			$this->form_validation->set_rules('email', 'Email')
 
 			$data = $this->input->post(NULL, true);
 

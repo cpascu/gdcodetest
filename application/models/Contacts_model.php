@@ -131,4 +131,13 @@ class Contacts_model extends Base_model {
 
 		return $this->delete_record($contactId);
 	}
+
+	public function is_email_taken($email, $contactId)
+	{
+		
+		return $this->db->select('*')
+					->where('email', $email)
+					->where('contactId !=', (int)$contactId)
+					->count_all();
+	}
 }

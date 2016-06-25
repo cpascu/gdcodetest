@@ -78,8 +78,8 @@ class Authenticate extends BASE_Controller {
 			'success' => false
 		);
 
-		$this->form_validation->set_rules('username',     'Username',         'required|max_length[15]|callback_duplicate_check[username]');
-		$this->form_validation->set_rules('email',        'Email',            'required|valid_email|callback_duplicate_check[email]');
+		$this->form_validation->set_rules('username',     'Username',         'required|max_length[15]|callback_duplicate_check[user_model,username]');
+		$this->form_validation->set_rules('email',        'Email',            'required|valid_email|callback_duplicate_check[user_model,email]');
 		$this->form_validation->set_rules('password',     'Password',         'required');
 		$this->form_validation->set_rules('passwordConf', 'Confirm Password', 'required');
 

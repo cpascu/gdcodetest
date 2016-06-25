@@ -9,14 +9,28 @@ trait ValidationRules
 	 *
 	 * @return bool False if username exists, true if available
 	 */
-	public function duplicate_check($value, $field)
+	public function duplicate_check($value, $model, $field)
 	{
-		$this->load->model('user_model');
+		$this->load->model($model);
 
-		if (!empty($this->user_model->get_record(array($field => $value))))
+		if (!empty($this->$model->get_record(array($field => $value))))
 		{
 			$this->form_validation->set_message('duplicate_check', 'The {field} is already taken.');
 			return false;
 		}
+
+		return true;
+	}
+
+	public function duplicate_contact_email($value, $contactId)
+	{
+		$this->load->model('contacts_model');
+		$this->contacts_model->is_email_taken($value, $contactId)
+		{
+			$this->form_validation->set_message('duplicate_check', 'This email is already used for another contact.');
+			return false;
+		}
+
+		return true;
 	}
 }
