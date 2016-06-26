@@ -1,11 +1,13 @@
 /**
- * Contacts Module
+ * Contacts Module, displays, adds, edits, deletes, and searches for contacts.
+ *
  * @author  Cosmin Pascu <csmnpsc@gmail.com>
  */
 (function(){
 	$(document).ready(function() {
 		var ContactsModule = function () {
 			var self       = this;
+			/* The array of active contacts in the list */
 			self.contacts  = window.base.contacts;
 			self.templates = {
 				contact: "<tr class='js-edit' data-contact-id='[[contactId]]'><td class='js-delete'>X</td><td>[[name]]</td><td>[[surname]]</td><td>[[email]]</td><td>[[phone]]</td></tr>",
@@ -44,6 +46,11 @@
 			self.refreshContactList();
 		}
 
+		/**
+		 * Refreshes the contacts list based on whatever is in self.contacts
+		 *
+		 * @return void
+		 */
 		ContactsModule.prototype.refreshContactList = function() {
 			var self     = this,
 			$contactList = $('.js-contact-list');
@@ -85,6 +92,14 @@
 			}
 		}
 
+		/**
+		 * Updates the modal form with corresponding data from active contact from self.contacts
+		 *
+		 * @param  Number actingIdx The index of the contact in the self.contacts array
+		 * @param  String type      The type of form (edit|delete)
+		 *
+		 * @return void
+		 */
 		ContactsModule.prototype.refreshForm = function (actingIdx, type) {
 			var self = this;
 
@@ -107,6 +122,13 @@
 			}
 		}
 
+		/**
+		 * General form submission.
+		 *
+		 * @param  Object $form The jQuery object containing the form.
+		 *
+		 * @return void
+		 */
 		ContactsModule.prototype.submitForm = function($form) {
 			var self    = this,
 			data        = $form.serialize(),
@@ -137,6 +159,14 @@
 			});
 		}
 
+		/**
+		 * Make updates to self.contacts based on form data.
+		 *
+		 * @param  Object $form     The jQuery object containing the form.
+		 * @param  Number pushToIdx The index of the contact in self.contacts that we should update (can be empty for add new)
+		 *
+		 * @return Boolean          True if successful, false otherwise.
+		 */
 		ContactsModule.prototype.syncContactList = function($form, pushToIdx) {
 			var self  = this,
 			data      = $form.serializeArray(),
