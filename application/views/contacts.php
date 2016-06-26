@@ -16,6 +16,7 @@
 <body>
 	<? $this->load->view('partials/form_add_contact'); ?>
 	<? $this->load->view('partials/form_edit_contact'); ?>
+	<? $this->load->view('partials/form_delete_contact'); ?>
 	
 	<div class="js-contact-list"></div>
 	

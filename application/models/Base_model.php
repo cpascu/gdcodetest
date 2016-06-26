@@ -144,7 +144,7 @@ abstract class Base_model extends CI_Model
 
 		$primaryId = (int)$primaryId;
 
-		$query = $this->db->where($this->_get_primary_key, $primaryId)->delete();
+		$query = $this->db->where($this->_get_primary_key(), $primaryId)->delete($this->_get_table_name());
 		
 		return false === $query ? false : true;
 	}

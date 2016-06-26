@@ -121,7 +121,35 @@ class Contacts extends BASE_Controller {
 
 	public function delete_contact_post()
 	{
+		$response = array(
+			'success' => false
+		);
 
+		$this->load->library('form_validation');
+
+		$this->form_validation->set_rules('contactId', 'Contact ID', 'required');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$response['errors']  = $this->form_validation->error_array();
+		}
+		else
+		{
+			$this->load->model('contacts_model');
+
+			$contactId = $this->input->post('contactId', true);
+
+			if ($this->contacts_model->delete_contact($contactId))
+			{
+				$response['success'] = true;
+			}
+			else
+			{
+				$response['errors']['general'] = 'Failed to delete contact.';
+			}
+		}
+
+		$this->_api_response($response);
 	}
 
 	public function search_contact_post()

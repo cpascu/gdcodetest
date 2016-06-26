@@ -19,7 +19,7 @@
 			var self       = this;
 			self.contacts  = window.base.contacts;
 			self.templates = {
-				contact: "<div class='js-edit' data-contact-id='[[contactId]]'>[[name]], [[email]]</div>",
+				contact: "<div><button class='js-delete'>X</button><div class='js-edit' data-contact-id='[[contactId]]'>[[name]], [[email]]</div></div>",
 			}
 
 			$('.js-form-add').submit(function() {
@@ -37,8 +37,14 @@
 
 			// open the edit contact modal
 			$('.js-contact-list').on('click', '.js-edit', function () {
-				self.refreshEditForm($(this).index());
+				self.refreshForm($(this).index(), 'edit');
 				$('.js-form-edit').data('acting-index', $(this).index());
+			});
+
+			// open the delete contact modal
+			$('.js-contact-list').on('click', '.js-delete', function () {
+				self.refreshForm($(this).index(), 'delete');
+				$('.js-form-delete').data('acting-index', $(this).index());
 			});
 
 			// add a custom field to the form
@@ -72,12 +78,12 @@
 			}
 		}
 
-		ContactsModule.prototype.refreshEditForm = function (actingIdx) {
+		ContactsModule.prototype.refreshForm = function (actingIdx, type) {
 			var self = this;
 
 			if ('undefined' !== typeof self.contacts[actingIdx]) {
 				var contact = self.contacts[actingIdx],
-				$modal      = $('.js-edit-contact-modal');
+				$modal      = $('.js-' + type + '-contact-modal');
 
 				for (var i in contact) {
 					var $fieldGroup = $modal.find('.js-' + i);
@@ -129,6 +135,12 @@
 			data      = $form.serializeArray(),
 			contact   = {},
 			pushToIdx = 'undefined' !== typeof pushToIdx ? pushToIdx : false;
+
+			// its holding only the contactId, after a successful delete
+			if (data.length === 1 && false !== pushToIdx) {
+				self.contacts.splice(pushToIdx, 1);
+				return true;
+			}
 
 			for (var i in data) {
 				if (data[i].value.length > 0) {

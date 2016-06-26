@@ -115,7 +115,7 @@ class Contacts_model extends Base_model {
 
 	public function delete_contact($contactId)
 	{
-		if (!empty($contactId) || !is_numeric($contactId))
+		if (empty($contactId) || !is_numeric($contactId))
 		{
 			log_message('error', __METHOD__ . ': Missing or invalid contactId.');
 			return false;
