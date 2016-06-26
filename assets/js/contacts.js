@@ -140,7 +140,7 @@
 				$modal.find('.has-error').removeClass('has-error');
 
 				if (response.success) {
-					self.syncContactList($form, $form.data('acting-index'));
+					self.syncContactList($form, $form.data('acting-index'), response.contactId);
 					$form.removeData('acting-index');
 
 					self.refreshContactList();
@@ -164,19 +164,25 @@
 		 *
 		 * @param  Object $form     The jQuery object containing the form.
 		 * @param  Number pushToIdx The index of the contact in self.contacts that we should update (can be empty for add new)
+		 * @param  Number contactId The contactId of a newly added contact.
 		 *
 		 * @return Boolean          True if successful, false otherwise.
 		 */
-		ContactsModule.prototype.syncContactList = function($form, pushToIdx) {
+		ContactsModule.prototype.syncContactList = function($form, pushToIdx, contactId) {
 			var self  = this,
 			data      = $form.serializeArray(),
 			contact   = {},
+			contactId = 'undefined' !== typeof contactId ? contactId : false,
 			pushToIdx = 'undefined' !== typeof pushToIdx ? pushToIdx : false;
 
-			// its holding only the contactId, after a successful delete
+			// its holding only the idx of the deleted contact, after a successful delete
 			if (data.length === 1 && false !== pushToIdx) {
 				self.contacts.splice(pushToIdx, 1);
 				return true;
+			}
+
+			if (false !== contactId) {
+				contact['contactId'] = contactId;
 			}
 
 			for (var i in data) {

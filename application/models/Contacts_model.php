@@ -123,10 +123,10 @@ class Contacts_model extends Base_model {
 
 		$contact = $this->get_record(array('contactId' => $contactId));
 
-		if (!empty($contact->acId))
+		if (!empty($contact) || !empty($contact[0]->acId))
 		{
 			$this->load->helper('async');
-			Async::run('cli/contact/delete', $contact->acId);
+			Async::run('cli/contact/delete', $contact[0]->acId);
 		}
 
 		return $this->delete_record($contactId);
@@ -141,7 +141,10 @@ class Contacts_model extends Base_model {
 			return false;
 		}
 
-		return $this->get_record(array('userId' => $userId), 'contactId, name, surname, email, phone, custom1, custom2, custom3, custom4, custom5');
+		return $this->get_record(
+			array('userId' => $userId), 
+			'contactId, name, surname, email, phone, custom1, custom2, custom3, custom4, custom5'
+		);
 	}
 
 	public function is_email_taken($email, $contactId)
