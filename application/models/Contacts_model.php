@@ -132,12 +132,41 @@ class Contacts_model extends Base_model {
 		return $this->delete_record($contactId);
 	}
 
+	public function search($token)
+	{
+		if (empty($token))
+		{
+			log_message('error', __METHOD__ . ': Invalid token.');
+			return false;
+		}
+
+		$query = $this->db->select('contactId')
+							->like('surname', $token)
+							->or_like('phone', $token)
+							->or_like('email', $token)
+							->get($this->_get_table_name());
+
+		if (false !== $query)
+		{
+			$resultArray = $query->result();
+			$results     = array();
+
+			foreach ($resultArray as $result)
+			{
+				$results[] = $result->contactId;
+			}
+
+			return $results;
+		}
+
+		return false;
+	}
+
 	public function get_contacts($userId)
 	{
 		if (empty($userId))
 		{
 			log_message('error', __METHOD__ . ': Invalid userId.');
-
 			return false;
 		}
 

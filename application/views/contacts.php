@@ -14,10 +14,24 @@
 	</script>
 </head>
 <body>
-	<? $this->load->view('partials/form_add_contact'); ?>
-	<? $this->load->view('partials/form_edit_contact'); ?>
-	<? $this->load->view('partials/form_delete_contact'); ?>
-	<? $this->load->view('partials/contact_list'); ?>
+	<br />
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-6">
+				<? $this->load->view('partials/form_add_contact'); ?>
+				<? $this->load->view('partials/form_edit_contact'); ?>
+				<? $this->load->view('partials/form_delete_contact'); ?>
+			</div>
+			<div class="col-xs-6">
+				<input class="js-search search pull-right" type='text' placeholder="Search" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<? $this->load->view('partials/contact_list'); ?>	
+			</div>
+		</div>	
+	</div>
 	
 	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.js"></script>
 	<script type="text/javascript" src="/assets/bower_components/bootstrap/dist/js/bootstrap.js"></script>

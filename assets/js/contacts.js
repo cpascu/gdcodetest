@@ -6,10 +6,11 @@
 (function(){
 	$(document).ready(function() {
 		var ContactsModule = function () {
-			var self       = this;
+			var self             = this;
 			/* The array of active contacts in the list */
-			self.contacts  = window.base.contacts;
-			self.templates = {
+			self.contacts        = window.base.contacts;
+			self.searchFilterIds = [];
+			self.templates       = {
 				contact: "<tr class='js-edit' data-contact-id='[[contactId]]'><td class='js-delete'>X</td><td>[[name]]</td><td>[[surname]]</td><td>[[email]]</td><td>[[phone]]</td></tr>",
 			}
 
@@ -43,6 +44,27 @@
 				}
 			});
 
+			$('.js-search').keyup(function() {
+				var $this = $(this);
+
+				if ($this.val().length > 2) {
+					// allow 500ms if the user keep typing, so we don't spam the server
+					window.clearTimeout(self.searchTimeout);
+
+					self.searchTimeout = setTimeout(function() {
+						$.post(window.base.siteUrl + 'api/contact/search', {q: $this.val()}, function(response) {
+							if (false !== response.success) {
+								self.searchFilterIds = response.results;
+								self.refreshContactList();
+							}
+						});
+					}, 500);
+				} else {
+					self.searchFilterIds = [];
+					self.refreshContactList();
+				}
+			});
+
 			self.refreshContactList();
 		}
 
@@ -60,6 +82,13 @@
 
 			// repaint list
 			for (var i in self.contacts) {
+				// if its a search, and contact not in search results, skip
+				// 
+				
+				if (self.searchFilterIds.length > 0 && -1 === self.searchFilterIds.indexOf(self.contacts[i].contactId)) {
+					continue;
+				}
+
 				//TODO: strip out [[]] from contact field values, because they will break the replace
 				var html = self.templates.contact;
 				html     = html.replace('[[contactId]]', self.contacts[i].contactId);
