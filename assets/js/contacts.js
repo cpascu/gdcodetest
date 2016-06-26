@@ -11,7 +11,7 @@
 			self.contacts        = window.base.contacts;
 			self.searchFilterIds = [];
 			self.templates       = {
-				contact: "<tr class='js-edit' data-contact-id='[[contactId]]'><td class='js-delete'>X</td><td>[[name]]</td><td>[[surname]]</td><td>[[email]]</td><td>[[phone]]</td></tr>",
+				contact: "<tr class='js-edit' data-contact-id='[[contactId]]'><td class='js-delete'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></td><td>[[name]]</td><td>[[surname]]</td><td>[[email]]</td><td>[[phone]]</td></tr>",
 			}
 
 			// submit the modal form
@@ -36,11 +36,23 @@
 
 			// add a custom field to the form
 			$('.js-add-custom').click(function() {
-				$hiddenCustomFields = $(this).parent().parent().find('.js-custom.hidden')
+				var $hiddenCustomFields = $(this).parent().parent().find('.js-custom.hidden');
 				$hiddenCustomFields.first().removeClass('hidden');
 
 				if ($hiddenCustomFields.length < 2) {
-					$(this).remove();
+					$(this).hide();
+				}
+			});
+
+			// remove a custom field from the form
+			$('.js-remove-custom').click(function() {
+				var $customField = $(this).parent().parent().parent();
+				// clear the val
+				$customField.find('.js-input').val('');
+				$customField.addClass('hidden');
+
+				if ($customField.parent().find('.js-custom.hidden').length < 5 ) {
+					$('.js-add-custom').show();
 				}
 			});
 

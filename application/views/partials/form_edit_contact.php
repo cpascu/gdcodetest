@@ -41,43 +41,58 @@
 					)); ?>
 				</div>
 				<div class="js-custom1 js-custom form-group hidden">
-					<?= form_input(array(
-						'name'        => 'custom1',
-						'class'       => 'js-input form-control',
-						'placeholder' => 'Custom Field'
-					)); ?>
+					<div class="input-group">
+						<?= form_input(array(
+							'name'        => 'custom1',
+							'class'       => 'js-input form-control',
+							'placeholder' => 'Custom Field'
+						)); ?>
+						<span class="input-group-addon"><span class="js-remove-custom glyphicon glyphicon-minus" aria-hidden="true"></span></span>
+					</div>
 				</div>
 				<div class="js-custom2 js-custom form-group hidden">
-					<?= form_input(array(
-						'name'        => 'custom2',
-						'class'       => 'js-input form-control',
-						'placeholder' => 'Custom Field'
-					)); ?>
+					<div class="input-group">
+						<?= form_input(array(
+							'name'        => 'custom2',
+							'class'       => 'js-input form-control',
+							'placeholder' => 'Custom Field'
+						)); ?>
+						<span class="input-group-addon"><span class="js-remove-custom glyphicon glyphicon-minus" aria-hidden="true"></span></span>
+					</div>
 				</div>
 				<div class="js-custom3 js-custom form-group hidden">
-					<?= form_input(array(
-						'name'        => 'custom3',
-						'class'       => 'js-input form-control',
-						'placeholder' => 'Custom Field'
-					)); ?>
+					<div class="input-group">
+						<?= form_input(array(
+							'name'        => 'custom3',
+							'class'       => 'js-input form-control',
+							'placeholder' => 'Custom Field'
+						)); ?>
+						<span class="input-group-addon"><span class="js-remove-custom glyphicon glyphicon-minus" aria-hidden="true"></span></span>
+					</div>
 				</div>
 				<div class="js-custom4 js-custom form-group hidden">
-					<?= form_input(array(
-						'name'        => 'custom4',
-						'class'       => 'js-input form-control',
-						'placeholder' => 'Custom Field'
-					)); ?>
+					<div class="input-group">
+						<?= form_input(array(
+							'name'        => 'custom4',
+							'class'       => 'js-input form-control',
+							'placeholder' => 'Custom Field'
+						)); ?>
+						<span class="input-group-addon"><span class="js-remove-custom glyphicon glyphicon-minus" aria-hidden="true"></span></span>
+					</div>
 				</div>
 				<div class="js-custom5 js-custom form-group hidden">
-					<?= form_input(array(
-						'name'        => 'custom5',
-						'class'       => 'js-input form-control',
-						'placeholder' => 'Custom Field'
-					)); ?>
+					<div class="input-group">
+						<?= form_input(array(
+							'name'        => 'custom5',
+							'class'       => 'js-input form-control',
+							'placeholder' => 'Custom Field'
+						)); ?>
+						<span class="input-group-addon"><span class="js-remove-custom glyphicon glyphicon-minus" aria-hidden="true"></span></span>
+					</div>
 				</div>
-				<div class="form-group">
-					<button type="button" class="js-add-custom btn btn-default">Add Custom Field</button>
-				</div>
+				<button type="button" class="js-add-custom btn btn-default" aria-label="Left Align">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+				</button>
 				<?= form_close(); ?>
 			</div>
 			<div class="modal-footer">

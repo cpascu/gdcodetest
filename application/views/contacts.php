@@ -23,7 +23,9 @@
 				<? $this->load->view('partials/form_delete_contact'); ?>
 			</div>
 			<div class="col-xs-6">
-				<input class="js-search search pull-right" type='text' placeholder="Search" />
+				<div class="form-group pull-right">
+					<input class="js-search search form-control" type='text' placeholder="Search" />	
+				</div>
 			</div>
 		</div>
 		<div class="row">
