@@ -1,12 +1,11 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
-require_once('Base_model.php');
 /**
  * User model.
  *
  * @author Cosmin Pascu <csmnpsc@gmail.com>
  */
-class User_model extends Base_model {
+class User_model extends BASE_Model {
 	private $_tableName  = 'users';
 	private $_primaryKey = 'userId';
 

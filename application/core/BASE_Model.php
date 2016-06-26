@@ -5,7 +5,7 @@
  *
  * @author Cosmin Pascu <csmnpsc@gmail.com>
  */
-abstract class Base_model extends CI_Model
+abstract class BASE_Model extends CI_Model
 {
 	public function __construct()
 	{

@@ -2,6 +2,8 @@
 
 /**
  * Custom extension of the CI controller.
+ *
+ * @author Cosmin Pascu <csmnpsc@gmail.com>
  */
 abstract class BASE_Controller extends CI_Controller
 {
@@ -57,7 +59,9 @@ abstract class BASE_Controller extends CI_Controller
 	 */
 	protected function _build()
 	{
-		$this->load->view($this->_pageLayout, $this->pageData);
+		$this->pageData['pageLayout'] = $this->_pageLayout;
+
+		$this->load->view('default', $this->pageData);
 	}
 
 	protected function _api_response($data) 

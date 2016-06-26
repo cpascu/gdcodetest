@@ -216,6 +216,8 @@
 			contactId = 'undefined' !== typeof contactId ? contactId : false,
 			pushToIdx = 'undefined' !== typeof pushToIdx ? pushToIdx : false;
 
+			$form[0].reset();
+
 			// its holding only the idx of the deleted contact, after a successful delete
 			if (data.length === 1 && false !== pushToIdx) {
 				self.contacts.splice(pushToIdx, 1);

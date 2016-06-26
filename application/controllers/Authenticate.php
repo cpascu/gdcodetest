@@ -7,12 +7,15 @@ class Authenticate extends BASE_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->pageData['mainJs'] = 'auth';
 	}
 
 	public function register()
 	{
 		$this->load->helper('form');
-		$this->_pageLayout = 'register';
+		$this->pageData['title'] = 'Register';
+		$this->_pageLayout       = 'register';
 		$this->_build();
 	}
 
@@ -24,8 +27,8 @@ class Authenticate extends BASE_Controller {
 		$this->load->library('github');
 
 		$this->pageData['githubLogin'] = $this->github->get_login_url();
-
-		$this->_pageLayout = 'login';
+		$this->pageData['title']       = 'Login';
+		$this->_pageLayout             = 'login';
 		$this->_build();
 	}
 

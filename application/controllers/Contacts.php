@@ -28,6 +28,9 @@ class Contacts extends BASE_Controller {
 		{
 			redirect('login');
 		}
+
+		$this->pageData['title']  = 'Address Book';
+		$this->pageData['mainJs'] = 'contacts';
 	}
 
 	public function index()
