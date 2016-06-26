@@ -17,7 +17,7 @@ trait ValidationRules
 
 		if (!empty($this->$params[0]->get_record(array($params[1] => $value))))
 		{
-			$this->form_validation->set_message('duplicate_check', "The {$params[1]} is already taken.");
+			$this->form_validation->set_message('duplicate_check', "The {$params[1]} is already used.");
 			return false;
 		}
 
@@ -29,7 +29,7 @@ trait ValidationRules
 		$this->load->model('contacts_model');
 		if ($this->contacts_model->is_email_taken($value, $contactId))
 		{
-			$this->form_validation->set_message('duplicate_check', 'This email is already used for another contact.');
+			$this->form_validation->set_message('duplicate_contact_email', 'This email is already used for another contact.');
 			return false;
 		}
 

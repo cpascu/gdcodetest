@@ -132,12 +132,24 @@ class Contacts_model extends Base_model {
 		return $this->delete_record($contactId);
 	}
 
-	public function is_email_taken($email, $contactId)
+	public function get_contacts($userId)
 	{
-		
+		if (empty($userId))
+		{
+			log_message('error', __METHOD__ . ': Invalid userId.');
+
+			return false;
+		}
+
+		return $this->get_record(array('userId' => $userId), 'contactId, name, surname, email, phone, custom1, custom2, custom3, custom4, custom5');
+	}
+
+	public function is_email_taken($email, $contactId)
+	{	
 		return $this->db->select('*')
+					->from($this->_get_table_name())
 					->where('email', $email)
 					->where('contactId !=', (int)$contactId)
-					->count_all();
+					->count_all_results();
 	}
 }

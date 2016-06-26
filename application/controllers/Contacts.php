@@ -4,11 +4,24 @@ require_once(dirname(__FILE__) . '/../traits/ValidationRules.php');
 class Contacts extends BASE_Controller {
 	use ValidationRules;
 
+	private $_allowedSubmitFields = array(
+		'contactId',
+		'name',
+		'surname',
+		'email',
+		'phone',
+		'custom1',
+		'custom2',
+		'custom3',
+		'custom4',
+		'custom5'
+	);
+
 	public function __construct()
 	{
 		parent::__construct();
 
-		// first check if logged in
+		// always check if logged in
 		$this->load->library('user');
 
 		if (!$this->user->is_logged_in())
@@ -22,10 +35,7 @@ class Contacts extends BASE_Controller {
 		$this->load->model('contacts_model');
 		$this->load->helper('form');
 
-		$userId   = $this->user->get_userid();
-		$contacts = $this->contacts_model->get_record(array('userId' => $userId));
-
-		$this->pageData['js']['userId']   = $userId;
+		$contacts                         = $this->contacts_model->get_contacts($this->user->get_userid());
 		$this->pageData['js']['contacts'] = $contacts;
 
 		$this->_pageLayout = 'contacts';
@@ -49,7 +59,11 @@ class Contacts extends BASE_Controller {
 		{
 			$this->load->model('contacts_model');
 
-			$data           = $this->input->post(NULL, true);
+			// get data from post
+			$data = $this->input->post(NULL, true);
+			// filter the data
+			$data = array_intersect_key($data, array_flip($this->_allowedSubmitFields));
+
 			$data['userId'] = $this->user->get_userid();
 			$contactId      = $this->contacts_model->add_contact($data);
 
@@ -86,26 +100,19 @@ class Contacts extends BASE_Controller {
 		else
 		{
 			$this->load->model('contacts_model');
+
+			// get data from post
 			$data = $this->input->post(NULL, true);
+			// filter the data
+			$data = array_intersect_key($data, array_flip($this->_allowedSubmitFields));
 
-			// check if email is taken
-			$this->form_validation->reset_validation();
-			$this->form_validation->set_rules('email', 'Email', "");
-
-			if ($this->form_validation->run() == FALSE)
+			if ($this->contacts_model->update_contact($data))
 			{
-				$response['errors']  = $this->form_validation->error_array();
+				$response['success'] = true;
 			}
 			else
 			{
-				if ($this->contacts_model->update_contact($data))
-				{
-					$response['success'] = true;
-				}
-				else
-				{
-					$response['errors']['general'] = 'Failed to update contact.';
-				}
+				$response['errors']['general'] = 'Failed to update contact.';
 			}
 		}
 

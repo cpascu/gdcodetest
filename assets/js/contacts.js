@@ -19,16 +19,36 @@
 			var self       = this;
 			self.contacts  = window.base.contacts;
 			self.templates = {
-				contact: "<div class=''>[[name]], [[email]]</div>",
+				contact: "<div class='js-edit' data-contact-id='[[contactId]]'>[[name]], [[email]]</div>",
 			}
 
 			$('.js-form-add').submit(function() {
-				var $form   = $(this);
-
+				
 				// send data to backend
-				self.submitForm($form);
-
+				
 				return false;
+			});
+
+			// submit the modal form
+			$('.js-submit').click(function() {
+				var $form = $($(this).data('target-form'));
+				self.submitForm($form);
+			});
+
+			// open the edit contact modal
+			$('.js-contact-list').on('click', '.js-edit', function () {
+				self.refreshEditForm($(this).index());
+				$('.js-form-edit').data('acting-index', $(this).index());
+			});
+
+			// add a custom field to the form
+			$('.js-add-custom').click(function() {
+				$hiddenCustomFields = $(this).parent().parent().find('.js-custom.hidden')
+				$hiddenCustomFields.first().removeClass('hidden');
+
+				if ($hiddenCustomFields.length < 2) {
+					$(this).remove();
+				}
 			});
 
 			self.refreshContactList();
@@ -45,9 +65,32 @@
 			for (var i in self.contacts) {
 				//TODO: strip out [[]] from contact field values, because they will break the replace
 				var html = self.templates.contact;
+				html     = html.replace('[[contactId]]', self.contacts[i].contactId);
 				html     = html.replace('[[name]]', self.contacts[i].name);
 				html     = html.replace('[[email]]', self.contacts[i].email);
 				$contactList.append(html);
+			}
+		}
+
+		ContactsModule.prototype.refreshEditForm = function (actingIdx) {
+			var self = this;
+
+			if ('undefined' !== typeof self.contacts[actingIdx]) {
+				var contact = self.contacts[actingIdx],
+				$modal      = $('.js-edit-contact-modal');
+
+				for (var i in contact) {
+					var $fieldGroup = $modal.find('.js-' + i);
+					if ('contactId' === i) {
+						$fieldGroup.val(contact[i]);
+						continue;
+					}
+					if ($fieldGroup.length > 0 && null !== contact[i]) {
+						$fieldGroup.removeClass('hidden').find('.js-input').val(contact[i]);
+					}
+				}
+
+				$modal.modal('show');
 			}
 		}
 
@@ -58,13 +101,25 @@
 
 			// create account
 			$.post(path, data, function(response) {
+				$modal = $('.js-modal.in');
+				$modal.find('.has-error').removeClass('has-error');
+
 				if (response.success) {
-					self.syncContactList($form, 'undefined' !== typeof response.contactIdx ? response.contactIdx : false);
+					self.syncContactList($form, $form.data('acting-index'));
+					$form.removeData('acting-index');
+
 					self.refreshContactList();
+					$modal.modal('hide');
 				}
 				else
 				{
 					// show the errors on the form
+					for (var i in response.errors) {
+						var $group = $modal.find('.js-' + i);
+						$group.addClass('has-error');
+						$group.find('.help-block').remove();
+						$group.append('<span class="help-block">' + response.errors[i] + '</span>')
+					}
 				}
 			});
 		}

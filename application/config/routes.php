@@ -63,7 +63,7 @@ $route['^api/register']           = 'authenticate/register_post';
 $route['^api/login']              = 'authenticate/login_post';
 $route['^api/facebook']           = 'authenticate/facebook_post';
 $route['^api/contact/add']        = 'contacts/add_contact_post';
-$route['^api/contact/update']     = 'contacts/update_contact_post';
+$route['^api/contact/edit']       = 'contacts/update_contact_post';
 $route['^api/contact/remove']     = 'contacts/delete_contact_post';
 $route['^api/contact/search']     = 'contacts/search_contact_post';
 

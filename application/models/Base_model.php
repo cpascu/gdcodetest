@@ -58,13 +58,21 @@ abstract class Base_model extends CI_Model
 	/**
 	 * Get a record by params.
 	 *
-	 * @param  array   $data  The params to search by.
+	 * @param  array  $data    The params to search by.
+	 * @param  string $columns Custom columns to select.
 	 *
-	 * @return mixed          The records found, empty array if nothing found, or false if failed.
+	 * @return mixed           The records found, empty array if nothing found, or false if failed.
 	 */
-	public function get_record(array $data) 
+	public function get_record(array $data, $columns = false) 
 	{
-		$this->db->select('*');
+		if (false !== $columns)
+		{
+			$this->db->select($columns);
+		}
+		else
+		{
+			$this->db->select('*');
+		}
 		
 		foreach ($data as $col => $val)
 		{
@@ -112,9 +120,8 @@ abstract class Base_model extends CI_Model
 		// remove primary key from input data
 		unset($data[$pKey]);
 
-		$query = $this->db->set($data)
-							->where($pKey, $primaryKey)
-							->update($this->_get_table_name());
+		$query = $this->db->where($pKey, $primaryKey)
+							->update($this->_get_table_name(), $data);
 
 		return $query;
 	}
