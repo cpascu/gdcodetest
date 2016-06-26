@@ -8,7 +8,7 @@
 			var self       = this;
 			self.contacts  = window.base.contacts;
 			self.templates = {
-				contact: "<div><button class='js-delete'>X</button><div class='js-edit' data-contact-id='[[contactId]]'>[[name]], [[email]]</div></div>",
+				contact: "<tr class='js-edit' data-contact-id='[[contactId]]'><td class='js-delete'>X</td><td>[[name]]</td><td>[[surname]]</td><td>[[email]]</td><td>[[phone]]</td></tr>",
 			}
 
 			// submit the modal form
@@ -24,9 +24,11 @@
 			});
 
 			// open the delete contact modal
-			$('.js-contact-list').on('click', '.js-delete', function () {
-				self.refreshForm($(this).index(), 'delete');
-				$('.js-form-delete').data('acting-index', $(this).index());
+			$('.js-contact-list').on('click', '.js-delete', function (e) {
+				e.stopPropagation();
+
+				self.refreshForm($(this).parent().index(), 'delete');
+				$('.js-form-delete').data('acting-index', $(this).parent().index());
 			});
 
 			// add a custom field to the form
@@ -54,8 +56,31 @@
 				//TODO: strip out [[]] from contact field values, because they will break the replace
 				var html = self.templates.contact;
 				html     = html.replace('[[contactId]]', self.contacts[i].contactId);
-				html     = html.replace('[[name]]', self.contacts[i].name);
-				html     = html.replace('[[email]]', self.contacts[i].email);
+
+				if ('undefined' !== typeof self.contacts[i].name && self.contacts[i].name) {
+					html = html.replace('[[name]]', self.contacts[i].name);
+				} else {
+					html = html.replace('[[name]]', '');
+				}
+
+				if ('undefined' !== typeof self.contacts[i].surname && self.contacts[i].surname) {
+					html = html.replace('[[surname]]', self.contacts[i].surname);
+				} else {
+					html = html.replace('[[surname]]', '');
+				}
+
+				if ('undefined' !== typeof self.contacts[i].email && self.contacts[i].email) {
+					html = html.replace('[[email]]', self.contacts[i].email);
+				} else {
+					html = html.replace('[[email]]', '');
+				}
+
+				if ('undefined' !== typeof self.contacts[i].phone && self.contacts[i].phone) {
+					html = html.replace('[[phone]]', self.contacts[i].phone);
+				} else {
+					html = html.replace('[[phone]]', '');
+				}
+
 				$contactList.append(html);
 			}
 		}

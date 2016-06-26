@@ -17,8 +17,7 @@
 	<? $this->load->view('partials/form_add_contact'); ?>
 	<? $this->load->view('partials/form_edit_contact'); ?>
 	<? $this->load->view('partials/form_delete_contact'); ?>
-	
-	<div class="js-contact-list"></div>
+	<? $this->load->view('partials/contact_list'); ?>
 	
 	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.js"></script>
 	<script type="text/javascript" src="/assets/bower_components/bootstrap/dist/js/bootstrap.js"></script>
