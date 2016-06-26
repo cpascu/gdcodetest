@@ -60,6 +60,11 @@
 				<?= form_close(); ?>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-xs-offset-3 col-xs-6">
+				<p class="text-center">Don't have an account? <a href="/register">Register</a> one now.</p>
+			</div>
+		</div>
 	</div>
 
 	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.js"></script>
