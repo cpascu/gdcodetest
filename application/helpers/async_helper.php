@@ -39,7 +39,7 @@ abstract class Async
 		}
 
 		
-		$command = '/Applications/MAMP/bin/php/php5.6.10/bin/php ' . dirname(__FILE__) . "/../../index.php {$path}/{$data} > /dev/null 2>/dev/null &";
+		$command = 'php ' . dirname(__FILE__) . "/../../index.php {$path}/{$data} > /dev/null 2>/dev/null &";
 
 		log_message('info', __METHOD__ . ": Queue async command: {$path}/{$data}");
 		
