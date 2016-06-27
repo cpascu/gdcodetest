@@ -137,18 +137,19 @@ class Contacts_model extends BASE_Model {
 		return $this->delete_record($contactId);
 	}
 
-	public function search($token)
+	public function search(array $data)
 	{
-		if (empty($token))
+		if (empty($data['token']) || empty($data['userId']))
 		{
-			log_message('error', __METHOD__ . ': Invalid token.');
+			log_message('error', __METHOD__ . ': Invalid params.');
 			return false;
 		}
 
 		$query = $this->db->select('contactId')
-							->like('surname', $token)
-							->or_like('phone', $token)
-							->or_like('email', $token)
+							->where('userId', $data['userId'])
+							->like('surname', $data['token'])
+							->or_like('phone', $data['token'])
+							->or_like('email', $data['token'])
 							->get($this->_get_table_name());
 
 		if (false !== $query)

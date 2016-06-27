@@ -226,8 +226,12 @@ class Contacts extends BASE_Controller {
 		{
 			$this->load->model('contacts_model');
 
-			$token   = $this->input->post('q', true);
-			$results = $this->contacts_model->search($token);
+			$token = $this->input->post('q', true);
+			$data  = array(
+				'token'  => $token,
+				'userId' => $this->user->get_userid()
+			);
+			$results = $this->contacts_model->search($data);
 
 			if (false !== $results)
 			{
