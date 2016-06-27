@@ -39,7 +39,9 @@ abstract class BASE_Model extends CI_Model
 	public function add_record(array $data, $sanitize = true)
 	{
 		if ($sanitize)
-		$data = $this->_sanitize($data);
+		{
+			$data = $this->_sanitize($data);
+		}
 
 		$this->db->insert($this->_get_table_name(), $data);
 
