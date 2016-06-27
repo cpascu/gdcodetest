@@ -56,6 +56,7 @@ $route['translate_uri_dashes']    = FALSE;
 // pages
 $route['^register']               = 'authenticate/register';
 $route['^login']                  = 'authenticate/login';
+$route['^logout']                 = 'authenticate/logout';
 $route['^contacts']               = 'contacts/index';
 
 // api endpoint
