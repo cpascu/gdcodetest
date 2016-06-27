@@ -11,6 +11,11 @@ class Authenticate extends BASE_Controller {
 		$this->pageData['mainJs'] = 'auth';
 	}
 
+	/**
+	 * Register page entrypoint.
+	 * 
+	 * @return void
+	 */
 	public function register()
 	{
 		$this->load->helper('form');
@@ -19,6 +24,11 @@ class Authenticate extends BASE_Controller {
 		$this->_build();
 	}
 
+	/**
+	 * Login page entrypoint.
+	 * 
+	 * @return void
+	 */
 	public function login()
 	{
 		$this->load->helper('form');
@@ -32,6 +42,11 @@ class Authenticate extends BASE_Controller {
 		$this->_build();
 	}
 
+	/**
+	 * Api call to attempt to login.
+	 * 
+	 * @return void
+	 */
 	public function login_post()
 	{
 		if (!$this->input->is_ajax_request())
@@ -78,6 +93,11 @@ class Authenticate extends BASE_Controller {
 		$this->_api_response($response);
 	}
 
+	/**
+	 * Api call to attempt to register.
+	 * 
+	 * @return void
+	 */
 	public function register_post()
 	{
 		if (!$this->input->is_ajax_request())
@@ -129,6 +149,11 @@ class Authenticate extends BASE_Controller {
 		$this->_api_response($response);
 	}
 
+	/**
+	 * Api call to validate a facebook frontend login.
+	 * 
+	 * @return void
+	 */
 	public function facebook_post()
 	{
 		if (!$this->input->is_ajax_request())
@@ -166,6 +191,11 @@ class Authenticate extends BASE_Controller {
 		$this->_api_response($response);
 	}
 
+	/**
+	 * Callback that github redirects to after a successful login.
+	 * 
+	 * @return void
+	 */
 	public function github_callback()
 	{
 		$this->load->library('github');
@@ -216,6 +246,13 @@ class Authenticate extends BASE_Controller {
 		}
 	}
 
+	/**
+	 * Helper function that is used by both github and facebook registration.
+	 * 
+	 * @param  array  $data The user data.
+	 * 
+	 * @return mixed        The userId if successful, false otherwise.
+	 */
 	private function _save_from_social(array $data)
 	{
 		if (empty($data['email']) || empty($data['type']))
