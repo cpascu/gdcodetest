@@ -107,7 +107,7 @@ class Activecampaign_wrapper {
 			$request = $this->_AC->api('contact/sync', $acData);
 		}
 
-		log_message('info', __METHOD__ ": {$request->result_message}");
+		log_message('info', __METHOD__ . ": {$request->result_message}");
 
 		if (!(int)$request->success)
 		{
@@ -133,7 +133,7 @@ class Activecampaign_wrapper {
 		// delete the contact from activecampaign
 		$request = $this->_AC->api('contact/delete', $deleteData);
 
-		log_message('info', __METHOD__ ": {$request->result_message}");
+		log_message('info', __METHOD__ . ": {$request->result_message}");
 
 		if (!(int)$request->success)
 		{
