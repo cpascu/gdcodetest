@@ -5,7 +5,7 @@
  *
  * @author  Cosmin Pascu <csmnpsc@gmail.com>
  */
-class AsyncAC extends CI_Controller {
+class Asyncac extends CI_Controller {
 	private $_pid = false;
 
 	public function __construct()
