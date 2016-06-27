@@ -9,7 +9,7 @@
 
 	<script type="text/javascript">
 		<? if (!empty($js)) : ?>
-			var base = JSON.parse('<?= json_encode($js); ?>');
+			var base = JSON.parse('<?= addslashes(json_encode($js)); ?>');
 		<? endif; ?>
 	</script>
 </head>
