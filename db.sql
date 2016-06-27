@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:8889
--- Generation Time: Jun 24, 2016 at 05:45 AM
+-- Generation Time: Jun 26, 2016 at 05:28 PM
 -- Server version: 5.5.42
 -- PHP Version: 5.6.10
 
@@ -23,9 +23,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `contacts` (
   `contactId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
+  `acId` int(11) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `name` varchar(15) CHARACTER SET utf8 NOT NULL,
-  `surname` varchar(15) CHARACTER SET utf8 DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `surname` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `phone` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `custom1` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
@@ -33,29 +34,17 @@ CREATE TABLE `contacts` (
   `custom3` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `custom4` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `custom5` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `synced` tinyint(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+  `synced` tinyint(2) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `contacts`
 --
 
-INSERT INTO `contacts` (`contactId`, `userId`, `created`, `name`, `surname`, `email`, `phone`, `custom1`, `custom2`, `custom3`, `custom4`, `custom5`, `synced`) VALUES
-(1, 0, '2016-06-23 05:13:26', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(2, 0, '2016-06-23 05:19:35', 'Cosmin', NULL, 'cosmin@cosminpascu.com', NULL, NULL, NULL, NULL, NULL, NULL, 1),
-(3, 0, '2016-06-23 05:22:03', 'Cosmin', NULL, 'cosmin@cosminpascu.com', NULL, NULL, NULL, NULL, NULL, NULL, 1),
-(4, 0, '2016-06-23 05:22:16', 'Cosmin2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(5, 0, '2016-06-23 05:37:18', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(6, 0, '2016-06-23 05:47:33', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(7, 0, '2016-06-23 05:50:57', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(8, 0, '2016-06-23 05:51:09', 'Cosmin2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(9, 0, '2016-06-23 05:51:11', 'Cosmin3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(10, 0, '2016-06-24 02:15:38', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(11, 0, '2016-06-24 02:15:39', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(12, 0, '2016-06-24 02:15:42', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(13, 0, '2016-06-24 02:15:42', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(14, 0, '2016-06-24 02:15:42', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(15, 0, '2016-06-24 02:15:58', 'Cosmin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `contacts` (`contactId`, `userId`, `acId`, `created`, `name`, `surname`, `email`, `phone`, `custom1`, `custom2`, `custom3`, `custom4`, `custom5`, `synced`) VALUES
+(102, 13, 18, '2016-06-26 01:00:16', 'Cosmin', '5', '5@cosminpascu.com', '12312313455', 'custom fieldeeeeee', NULL, NULL, NULL, NULL, 1),
+(113, 13, 25, '2016-06-26 20:48:53', 'someoth', 'johnny', 'blue@cosminpascu.com', '833 333-4233', NULL, NULL, NULL, NULL, NULL, 1),
+(114, 13, 26, '2016-06-26 23:18:59', 'Mister', 'T', 'mrt@cosminpascu.com', '60483933333', 'Something special', 'Wonderful', NULL, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -70,7 +59,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` char(60) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT 'Holds a bcrypt password',
   `type` enum('site','facebook','github') NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
@@ -86,7 +75,8 @@ INSERT INTO `users` (`userId`, `created`, `username`, `email`, `password`, `type
 (9, '0000-00-00 00:00:00', 'test6', 'test6@gdtest.com', '$2y$10$Z9FavwTNkrqHtuhdaZaXN.1R9mW8hD7SzSwDd9RnRUHbKXhGq472W', ''),
 (10, '0000-00-00 00:00:00', 'test01', 'test01@gdtest.com', '$2y$10$qRilogZWaw3qUgNQgHUxuOr2Zeb0g32o7.E2JmMmEGhmLSoLwSn8O', ''),
 (11, '0000-00-00 00:00:00', NULL, 'cpascu.web@gmail.com', NULL, ''),
-(13, '0000-00-00 00:00:00', NULL, 'pascutube@gmail.com', NULL, '');
+(13, '0000-00-00 00:00:00', NULL, 'pascutube@gmail.com', NULL, ''),
+(14, '2016-06-26 23:02:21', NULL, 'xcosminel@gmail.com', NULL, 'github');
 
 --
 -- Indexes for dumped tables
@@ -114,9 +104,9 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `contactId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+  MODIFY `contactId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=124;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
