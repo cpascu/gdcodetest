@@ -43,6 +43,18 @@ class Authenticate extends BASE_Controller {
 	}
 
 	/**
+	 * Logs out the user and redirects to the login page.
+	 *
+	 * @return void
+	 */
+	public function logout()
+	{
+		$this->load->library('user');
+		$this->user->logout();
+		redirect('login');
+	}
+
+	/**
 	 * Api call to attempt to login.
 	 * 
 	 * @return void

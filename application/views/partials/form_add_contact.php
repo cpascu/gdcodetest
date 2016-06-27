@@ -2,6 +2,7 @@
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".js-add-contact-modal">
 	New Contact
 </button>
+<a href='/logout' class='btn btn-default'>Logout</a>
 
 <div class="js-add-contact-modal js-modal modal fade" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
