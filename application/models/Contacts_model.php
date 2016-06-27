@@ -101,6 +101,7 @@ class Contacts_model extends BASE_Model {
 		if (!is_numeric($data['contactId']))
 		{
 			log_message('error', __METHOD__ . ': contactId must be numeric.');
+			return false;
 		}
 
 		if ($this->update_record($data))
