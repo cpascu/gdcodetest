@@ -1,9 +1,18 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 require_once(dirname(__FILE__) . '/../traits/ValidationRules.php');
 
+/**
+ * Controller for the contacts page and contacts api calls.
+ *
+ * @author  Cosmin Pascu <csmnpsc@gmail.com>
+ */
 class Contacts extends BASE_Controller {
 	use ValidationRules;
 
+	/**
+	 * Allowed submit fields for an update/insert action.
+	 * @var array
+	 */
 	private $_allowedSubmitFields = array(
 		'contactId',
 		'name',
@@ -33,6 +42,11 @@ class Contacts extends BASE_Controller {
 		$this->pageData['mainJs'] = 'contacts';
 	}
 
+	/**
+	 * Entry point for the contacts page.
+	 * 
+	 * @return void
+	 */
 	public function index()
 	{
 		$this->load->model('contacts_model');
@@ -45,6 +59,11 @@ class Contacts extends BASE_Controller {
 		$this->_build();
 	}
 
+	/**
+	 * Api entry point to add a new contact.
+	 *
+	 * @return  void
+	 */
 	public function add_contact_post()
 	{
 		if (!$this->input->is_ajax_request())
@@ -89,6 +108,11 @@ class Contacts extends BASE_Controller {
 		$this->_api_response($response);
 	}
 
+	/**
+	 * Api entry point to update a contact.
+	 * 
+	 * @return void
+	 */
 	public function update_contact_post()
 	{
 		if (!$this->input->is_ajax_request())
@@ -132,6 +156,11 @@ class Contacts extends BASE_Controller {
 		$this->_api_response($response);
 	}
 
+	/**
+	 * Api entrypoint to delete a contact.
+	 * 
+	 * @return void
+	 */
 	public function delete_contact_post()
 	{
 		if (!$this->input->is_ajax_request())
@@ -170,6 +199,11 @@ class Contacts extends BASE_Controller {
 		$this->_api_response($response);
 	}
 
+	/**
+	 * Api entrypoint to search for a contact.
+	 * 
+	 * @return void
+	 */
 	public function search_contact_post()
 	{
 		if (!$this->input->is_ajax_request())
