@@ -147,9 +147,11 @@ class Contacts_model extends BASE_Model {
 
 		$query = $this->db->select('contactId')
 							->where('userId', $data['userId'])
+							->group_start()
 							->like('surname', $data['token'])
 							->or_like('phone', $data['token'])
 							->or_like('email', $data['token'])
+							->group_end()
 							->get($this->_get_table_name());
 
 		if (false !== $query)
