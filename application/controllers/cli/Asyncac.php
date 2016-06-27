@@ -91,6 +91,8 @@ class Asyncac extends CI_Controller {
 
 		$this->load->library('activecampaign_wrapper');
 		$this->activecampaign_wrapper->delete_contact($acId);
+
+		$this->_finish(0);
 	}
 
 	private function _finish($exitCode = 0)
