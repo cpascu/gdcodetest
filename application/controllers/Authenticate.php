@@ -34,6 +34,11 @@ class Authenticate extends BASE_Controller {
 
 	public function login_post()
 	{
+		if (!$this->input->is_ajax_request())
+		{
+		   exit('No direct script access allowed');
+		}
+
 		$this->load->library('form_validation');
 
 		$response = array(
@@ -75,6 +80,11 @@ class Authenticate extends BASE_Controller {
 
 	public function register_post()
 	{
+		if (!$this->input->is_ajax_request())
+		{
+		   exit('No direct script access allowed');
+		}
+
 		$this->load->library('form_validation');
 
 		$response = array(
@@ -121,6 +131,11 @@ class Authenticate extends BASE_Controller {
 
 	public function facebook_post()
 	{
+		if (!$this->input->is_ajax_request())
+		{
+		   exit('No direct script access allowed');
+		}
+
 		$this->load->library('facebook');
 
 		$response = array(

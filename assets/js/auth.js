@@ -6,6 +6,9 @@
 			data      = $form.serialize(),
 			path      = $form.attr('action');
 
+			$('.has-error').removeClass('has-error');
+			$('.help-block').remove();
+
 			// create account
 			$.post(path, data, function(response) {
 				if (response.success) {
@@ -14,8 +17,10 @@
 					$('.js-error').remove();
 
 					if ('undefined' !== typeof(response.errors)) {
-						for (var type in response.errors) {
-							$('.js-' + type).after('<div class="js-error error">' + response.errors[type] + '</div>');
+						for (var i in response.errors) {
+							var $group = $('.js-' + i);
+							$group.addClass('has-error');
+							$group.append('<span class="help-block">' + response.errors[i] + '</span>')
 						}
 					}
 				}

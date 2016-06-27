@@ -177,7 +177,7 @@
 
 			// create account
 			$.post(path, data, function(response) {
-				$modal = $('.js-modal.in');
+				var $modal = $('.js-modal.in');
 				$modal.find('.has-error').removeClass('has-error');
 
 				if (response.success) {

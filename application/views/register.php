@@ -8,31 +8,31 @@
 	<div class="row">
 		<div class="col-xs-offset-3 col-xs-6">
 			<?= form_open('api/register', array('class' => 'js-auth', 'role' => 'form')); ?>
-				<div class="form-group">
+				<div class="js-username form-group">
 					<?= form_input(array(
 						'name'        => 'username',
-						'class'       => 'js-input js-username form-control',
+						'class'       => 'js-input form-control',
 						'placeholder' => 'Username'
 					)); ?>
 				</div>
-				<div class="form-group">
+				<div class="js-email form-group">
 					<?= form_input(array(
 						'name'        => 'email',
-						'class'       => 'js-input js-email form-control',
+						'class'       => 'js-input form-control',
 						'placeholder' => 'Email'
 					)); ?>
 				</div>
-				<div class="form-group">
+				<div class="js-password form-group">
 					<?= form_password(array(
 						'name'        => 'password',
-						'class'       => 'js-input js-password form-control',
+						'class'       => 'js-input form-control',
 						'placeholder' => 'Password'
 					)); ?>
 				</div>
-				<div class="form-group">
+				<div class="js-passwordConf form-group">
 					<?= form_password(array(
 						'name'        => 'passwordConf',
-						'class'       => 'js-input js-passwordConf form-control',
+						'class'       => 'js-input form-control',
 						'placeholder' => 'Confirm Password'
 					)); ?>
 				</div>

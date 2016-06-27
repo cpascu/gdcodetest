@@ -47,6 +47,11 @@ class Contacts extends BASE_Controller {
 
 	public function add_contact_post()
 	{
+		if (!$this->input->is_ajax_request())
+		{
+		   exit('No direct script access allowed');
+		}
+
 		$response = array(
 			'success' => false
 		);
@@ -86,6 +91,11 @@ class Contacts extends BASE_Controller {
 
 	public function update_contact_post()
 	{
+		if (!$this->input->is_ajax_request())
+		{
+		   exit('No direct script access allowed');
+		}
+
 		$response = array(
 			'success' => false
 		);
@@ -124,6 +134,11 @@ class Contacts extends BASE_Controller {
 
 	public function delete_contact_post()
 	{
+		if (!$this->input->is_ajax_request())
+		{
+		   exit('No direct script access allowed');
+		}
+
 		$response = array(
 			'success' => false
 		);
@@ -157,6 +172,11 @@ class Contacts extends BASE_Controller {
 
 	public function search_contact_post()
 	{
+		if (!$this->input->is_ajax_request())
+		{
+		   exit('No direct script access allowed');
+		}
+
 		$response = array(
 			'success' => false
 		);
@@ -194,8 +214,8 @@ class Contacts extends BASE_Controller {
 	 */
 	private function _set_main_rules()
 	{
-		$this->form_validation->set_rules('name',      'Name',          'required|max_length[15]');
-		$this->form_validation->set_rules('surname',   'Surname',       'max_length[15]');
+		$this->form_validation->set_rules('name',      'Name',          'required|max_length[255]');
+		$this->form_validation->set_rules('surname',   'Surname',       'max_length[255]');
 		$this->form_validation->set_rules('phone',     'Phone',         'max_length[20]');
 		$this->form_validation->set_rules('custom1',   'Custom Fields', 'max_length[255]');
 		$this->form_validation->set_rules('custom2',   'Custom Fields', 'max_length[255]');
