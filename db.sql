@@ -73,10 +73,7 @@ INSERT INTO `users` (`userId`, `created`, `username`, `email`, `password`, `type
 (7, '0000-00-00 00:00:00', 'test4', 'test4@gdtest.com', '$2y$10$xCUm4VnhAMsPPsL8WGLzle2bq0cZ6Y.WemdsVz7cWLOFYA3A4bS2u', ''),
 (8, '0000-00-00 00:00:00', 'test5', 'test5@gdtest.com', '$2y$10$HvkS5qjOwFo5vzB0TajaNeMhLS.oorgveECwS/ddaiMC5eD1uBT1S', ''),
 (9, '0000-00-00 00:00:00', 'test6', 'test6@gdtest.com', '$2y$10$Z9FavwTNkrqHtuhdaZaXN.1R9mW8hD7SzSwDd9RnRUHbKXhGq472W', ''),
-(10, '0000-00-00 00:00:00', 'test01', 'test01@gdtest.com', '$2y$10$qRilogZWaw3qUgNQgHUxuOr2Zeb0g32o7.E2JmMmEGhmLSoLwSn8O', ''),
-(11, '0000-00-00 00:00:00', NULL, 'cpascu.web@gmail.com', NULL, ''),
-(13, '0000-00-00 00:00:00', NULL, 'pascutube@gmail.com', NULL, ''),
-(14, '2016-06-26 23:02:21', NULL, 'xcosminel@gmail.com', NULL, 'github');
+(10, '0000-00-00 00:00:00', 'test01', 'test01@gdtest.com', '$2y$10$qRilogZWaw3qUgNQgHUxuOr2Zeb0g32o7.E2JmMmEGhmLSoLwSn8O', '');
 
 --
 -- Indexes for dumped tables
